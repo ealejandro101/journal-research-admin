@@ -10,7 +10,8 @@
     "lint": "vue-cli-service lint",
     "dev-old": "node build/dev-server.js",
     "build-old": "node build/build.js",
-    "inspect": "vue-cli-service inspect > inspect.js"
+    "inspect": "vue-cli-service inspect > inspect.js",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
