@@ -19,4 +19,8 @@ export default {
       height: 100%;
     }
   }
+
+  .d-flow-root{
+    display: flow-root;
+  }
 </style>

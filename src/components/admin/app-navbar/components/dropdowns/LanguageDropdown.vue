@@ -56,6 +56,7 @@ export default {
   methods: {
     setLanguage (locale) {
       Vue.i18n.set(locale)
+      this.$bus.$emit('change-lang', locale)
     },
 
     currentLanguage () {
