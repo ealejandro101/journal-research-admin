@@ -41,16 +41,7 @@ export default {
     }
   },
   created () {
-    let model = this.$route.params.model
-    let self = this
-    if (model === 'journal') {
-      controllerCrud.crudOfJournal(function (err, data) {
-        console.log(data)
-        if (!err) {
-          self.form = data
-        }
-      })
-    }
+    this.changeModel()
     /* controllerServices.getJournals()
     .then(response => response.json())
         .catch(error => console.error('Error:', error))
@@ -78,6 +69,24 @@ export default {
               })
           })
       }
+    },
+    changeModel () {
+      let model = this.$route.params.model
+      let self = this
+      if (model === 'journal') {
+        controllerCrud.crudOfJournal(function (err, data) {
+          if (!err) {
+            self.form = data
+          }
+        })
+      } else {
+        self.form = undefined
+      }
+    }
+  },
+  watch: {
+    '$route.params.model': function () {
+      this.changeModel()
     }
   },
   computed: {

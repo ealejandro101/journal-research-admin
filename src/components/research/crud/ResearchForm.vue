@@ -64,53 +64,12 @@ export default {
       default () {
         return {
           title: 'Login',
-          description: 'Ingresa con tus credenciales para comenzar',
+          description: 'En el momento solo se tiene Journal/Revista',
           inputs: [
-            {
-              label: 'usuario',
-              placeholder: 'Ingrese su usuario',
-              type: 'text',
-              active: true,
-              id: 'input-user',
-              res: '',
-              name: '',
-              value: ''
-            },
-            {
-              label: 'Contraseña',
-              placeholder: 'Ingrese su contraseña',
-              type: 'password',
-              active: true,
-              id: 'input-ecn',
-              res: '',
-              name: '',
-              value: ''
-            },
-            {/* Input de opciones */
-              label: 'Genero',
-              type: 'checkbox', /* radio */
-              active: true,
-              id: 'genero',
-              res: '',
-              options: [
-                {
-                  name: 'genero', /* igual en radio */
-                  value: 'femenino',
-                  checked: true,
-                  text: 'Femenino'
-                },
-                {
-                  name: 'genero',
-                  value: 'masculino',
-                  checked: false,
-                  text: 'Masculino'
-                }
-              ]
-            }
           ],
           button: {
             textButton: 'Ingresar',
-            active: true
+            active: false
           },
           button_aux: {
             textButton: 'Ingresar',
@@ -120,15 +79,14 @@ export default {
             description: 'olvido contraseña, haz click',
             span: 'aqui',
             link: '/FormRespondent',
-            active: true
+            active: false
           },
           {
             description: '',
             span: '',
             link: '',
             active: false
-          }],
-          note: 'Comunicate al xxxxxx'
+          }]
         }
       }
     }
