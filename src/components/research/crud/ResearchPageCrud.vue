@@ -57,15 +57,26 @@ export default {
       if (model === 'journal') {
         controllerServices.getJournalsCount()
           .then(responseCount => responseCount.json())
-          .catch(error => console.error('Error:', error))
+          .catch(error => {
+            console.error('Error:', error)
+            alert("Error: "+error)
+            })
           .then(responseCount => {
             req['id'] = responseCount['count'] + 1
-            console.log(req)
             controllerServices.postJournal(req)
               .then(response => response.json())
-              .catch(error => console.error('Error:', error))
+              .catch(error => {
+                console.error('Error:', error)
+                alert("Error: "+error)
+                })
               .then(response => {
-                console.log(response)
+                if(response["id"] !== undefined){
+                  alert("Se inserto Correctamente")
+                }else{
+                  console.error('Error:', response.error)
+                  alert("Error: "+response.error.message)
+                }
+                
               })
           })
       }
