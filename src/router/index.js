@@ -17,7 +17,7 @@ export default new Router({
       redirect: { name: 'dashboard' },
     },
     {
-      path: '/crud/:model',
+      path: '/addJournal',
       component: Crud
     },
     {

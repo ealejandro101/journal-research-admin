@@ -96,23 +96,27 @@ export default {
 
     }
   },
+  created () {
+      let _self = this
+      this.$bus.$on('send-form', function (data) {
+          if(data === _self.form.title){
+              console.log(_self.getJsonResponse())
+              _self.$emit('listen:event', {id: _self.form.title, data: _self.getJsonResponse()})
+          }
+      })
+  },
   methods: {
-    acton_event: function () {
-      let jsonResponse = {}
-      for (const iterator of this.form.inputs) {
-        if (iterator.active) {
-          jsonResponse[iterator.id] = iterator.res
+    getJsonResponse(){
+        let jsonResponse = {}
+        for (const iterator of this.form.inputs) {
+            if (iterator.active) {
+            jsonResponse[iterator.id] = iterator.res
+            }
         }
-      }
-      this.$emit('listen:event', jsonResponse)
+        return jsonResponse
     },
-    acton_event_aux: function () {
-      let jsonResponse = {}
-      for (const iterator of this.form.inputs) {
-        if (iterator.active) {
-          jsonResponse[iterator.id] = iterator.res
-        }
-      }
+    acton_event: function () {
+      let jsonResponse = this.getJsonResponse()
       this.$emit('listen:event', jsonResponse)
     }
   }

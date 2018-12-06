@@ -3,10 +3,13 @@
     <app-navbar :isOpen="opened" @toggle-menu="toggleSidebar"/>
     <app-sidebar :isOpen="opened" @toggle-menu="toggleSidebar"/>
     <main slot="content" id="content" class="content" role="main">
-        <div>
-
-        </div>
-        <research-form :form="form" @listen:event="post"></research-form>
+        <research-form :form="formJournal" @listen:event="sendSection"></research-form>
+        <research-form :form="formJContact" @listen:event="sendSection"></research-form>
+        <research-form :form="formJAdditional" @listen:event="sendSection"></research-form>
+        <research-form :form="formLocation" @listen:event="sendSection"></research-form>
+        <research-form :form="formIndexing" @listen:event="sendSection"></research-form>
+        <research-form :form="formLanguage" @listen:event="sendSection"></research-form>
+        <button class="btn btn-secondary" @click="sendForm">Enviar</button>
     </main>
     <span slot="footer">©2018. Made by&nbsp;<a href="https://epicmax.co" target="_blank">Epicmax </a></span>
   </vuestic-layout>
@@ -37,24 +40,71 @@ export default {
   data () {
     return {
       opened: true,
-      form: undefined
+      formJournal: undefined,
+      formJContact: undefined,
+      formJAdditional: undefined,
+      formLanguage: undefined,
+      formIndexing: undefined,
+      formLocation: undefined,
+      currentId: undefined
     }
   },
   created () {
-    this.changeModel()
-    /* controllerServices.getJournals()
-    .then(response => response.json())
-        .catch(error => console.error('Error:', error))
-        .then(response => {
-            console.log(response)}) */
+    let _self = this
+    // this.removeInsertion()
+    controllerCrud.crudOfJournal(function (errJournal, dataJournal) {
+      if (errJournal) {
+        alert(dataJournal)
+        return
+      }
+      controllerCrud.crudOfJContact(function (errContact, dataContact) {
+        if (errContact) {
+          alert(dataContact)
+          return
+        }
+        controllerCrud.crudOfJAdditional(function (errAdd, dataAdd) {
+          if (errAdd) {
+            alert(dataAdd)
+            return
+          }
+          controllerCrud.crudOfJLanguage(function (errLan, dataLan) {
+            if (errAdd) {
+              alert(dataAdd)
+              return
+            }
+            controllerCrud.crudOfJIndexing(function (errInd, dataInd) {
+              if (errAdd) {
+                alert(dataAdd)
+                return
+              }
+              controllerCrud.crudOfJLocation(function (errLoc, dataLoc) {
+                if (errAdd) {
+                  alert(dataAdd)
+                  return
+                }
+                _self.formJournal = dataJournal
+                _self.formJContact = dataContact
+                _self.formJAdditional = dataAdd
+                _self.formLanguage = dataLan
+                _self.formIndexing = dataInd
+                _self.formLocation = dataLoc
+              })
+            })
+          })
+        })
+      })
+    })
   },
   methods: {
     toggleSidebar (opened) {
       this.opened = opened
     },
-    post (req) {
-      let model = this.$route.params.model
-      if (model === 'journal') {
+    sendForm () {
+      this.$bus.$emit('send-form', 'Revista')
+    },
+    sendSection (jsonResponse) {
+      let _self = this
+      if (jsonResponse.id === 'Revista') {
         controllerServices.getJournalsCount()
           .then(responseCount => responseCount.json())
           .catch(error => {
@@ -62,42 +112,169 @@ export default {
             alert("Error: "+error)
             })
           .then(responseCount => {
-            req['id'] = responseCount['count'] + 1
-            controllerServices.postJournal(req)
-              .then(response => response.json())
-              .catch(error => {
-                console.error('Error:', error)
-                alert("Error: "+error)
-                })
-              .then(response => {
+            jsonResponse.data['id'] = responseCount['count'] + 1
+            _self.sendModel(controllerServices.getEnum().revista, jsonResponse.data).then(response => {
                 if(response["id"] !== undefined){
-                  alert("Se inserto Correctamente")
+                  _self.currentId = response["id"]
+                  _self.$bus.$emit('send-form', 'RContacto')
                 }else{
                   console.error('Error:', response.error)
                   alert("Error: "+response.error.message)
                 }
-                
               })
           })
-      }
-    },
-    changeModel () {
-      let model = this.$route.params.model
-      let self = this
-      if (model === 'journal') {
-        controllerCrud.crudOfJournal(function (err, data) {
-          if (!err) {
-            self.form = data
+      }else if (_self.currentId === undefined) {
+        alert('Error, reinicie e intente de nuevo')
+      }else if (jsonResponse.id === 'RContacto') {
+        jsonResponse.data['id'] = _self.currentId
+        _self.sendModel(controllerServices.getEnum().rcontacto, jsonResponse.data).then(response => {
+          if(response["id"] !== undefined){
+            _self.$bus.$emit('send-form', 'RAdicional')
+          }else{
+            _self.removeInsertion()
+            console.error('Error:', response.error)
+            alert("Error: "+response.error.message)
           }
         })
-      } else {
-        self.form = undefined
+      }else if (jsonResponse.id === 'RAdicional') {
+        jsonResponse.data['id'] = _self.currentId
+        _self.sendModel(controllerServices.getEnum().radicional, jsonResponse.data).then(response => {
+          if(response["id"] !== undefined){
+            _self.$bus.$emit('send-form', 'RUbicacion')
+          }else{
+            _self.removeInsertion()
+            console.error('Error:', response.error)
+            alert("Error: "+response.error.message)
+          }
+        })
+      }else if (jsonResponse.id === 'RUbicacion') {
+        jsonResponse.data['id'] = _self.currentId
+        _self.sendModel(controllerServices.getEnum().rubicacion, jsonResponse.data).then(response => {
+          if(response["id"] !== undefined){
+            _self.$bus.$emit('send-form', 'RIndexaciones')
+          }else{
+            _self.removeInsertion()
+            console.error('Error:', response.error)
+            alert("Error: "+response.error.message)
+          }
+        })
+      }else if (jsonResponse.id === 'RIndexaciones') {
+        jsonResponse.data['revistaId'] = _self.currentId
+        _self.sendModel(controllerServices.getEnum().rindexaciones, jsonResponse.data).then(response => {
+          if(response["revistaId"] !== undefined){
+            _self.$bus.$emit('send-form', 'RIdioma')
+          }else{
+            _self.removeInsertion()
+            console.error('Error:', response.error)
+            alert("Error: "+response.error.message)
+          }
+        })
+      }else if (jsonResponse.id === 'RIdioma') {
+        jsonResponse.data['revistaId'] = _self.currentId
+        _self.sendModel(controllerServices.getEnum().ridiomas, jsonResponse.data).then(response => {
+          if(response["revistaId"] !== undefined){
+            alert('Se ha insertado la revista completa con exito')
+            _self.currentId = undefined
+          }else{
+            _self.removeInsertion()
+            console.error('Error:', response.error)
+            alert("Error: "+response.error.message)
+          }
+        })
       }
-    }
-  },
-  watch: {
-    '$route.params.model': function () {
-      this.changeModel()
+    },
+    sendModel (model, data) {
+      return controllerServices.postModel(model, data)
+        .then(response => response.json())
+        .catch(error => {
+          console.error('Error:', error)
+          alert("Error: "+error)
+          })
+    },
+    removeInsertion () {
+      let _self = this
+      if (_self.currentId === undefined) return
+      controllerServices.deleteModel(controllerServices.getEnum().rcontacto, _self.currentId)
+        .catch(error => {
+          alert('No se ha eliminado RContacto, favor eliminarla manualmente desde https://jasolutions.com.co:2083/cpsess8986912440/3rdparty/phpMyAdmin/index.php?login=1&post_login=95105964238457');
+          console.error('Error:', error)
+          alert("Error: "+error)
+        })
+        .then(resp => {
+          if(resp.count === undefined){
+            alert('No se ha eliminado RContacto, favor eliminarla manualmente desde https://jasolutions.com.co:2083/cpsess8986912440/3rdparty/phpMyAdmin/index.php?login=1&post_login=95105964238457');
+          }else{
+            console.log('Se ha eliminado RContacto');
+          }
+          controllerServices.deleteModel(controllerServices.getEnum().radicional, _self.currentId)
+            .catch(error => {
+              alert('No se ha eliminado radicional, favor eliminarla manualmente desde https://jasolutions.com.co:2083/cpsess8986912440/3rdparty/phpMyAdmin/index.php?login=1&post_login=95105964238457');
+              console.error('Error:', error)
+              alert("Error: "+error)
+            })
+            .then(resp => {
+              if(resp.count === undefined){
+                alert('No se ha eliminado radicional, favor eliminarla manualmente desde https://jasolutions.com.co:2083/cpsess8986912440/3rdparty/phpMyAdmin/index.php?login=1&post_login=95105964238457');
+              }else{
+                console.log('Se ha eliminado radicional');
+              }
+              controllerServices.deleteModel(controllerServices.getEnum().rubicacion, _self.currentId)
+                .catch(error => {
+                  alert('NO Se ha eliminado rubicacion, favor eliminarla manualmente desde https://jasolutions.com.co:2083/cpsess8986912440/3rdparty/phpMyAdmin/index.php?login=1&post_login=95105964238457');
+                  console.error('Error:', error)
+                  alert("Error: "+error)
+                })
+                .then(resp => {
+                  if(resp.count === undefined){
+                    alert('NO Se ha eliminado rubicacion, favor eliminarla manualmente desde https://jasolutions.com.co:2083/cpsess8986912440/3rdparty/phpMyAdmin/index.php?login=1&post_login=95105964238457');
+                  }else{
+                    console.log('Se ha eliminado rubicacion');
+                  }
+                  alert('NO Se ha eliminado rindexaciones, ridiomas, revista, favor eliminarlas manualmente desde https://jasolutions.com.co:2083/cpsess8986912440/3rdparty/phpMyAdmin/index.php?login=1&post_login=95105964238457');
+                  /* controllerServices.deleteModel(controllerServices.getEnum().rindexaciones, _self.currentId)
+                    .catch(error => {
+                      alert('NO Se ha eliminado rindexaciones, favor eliminarla manualmente desde https://jasolutions.com.co:2083/cpsess8986912440/3rdparty/phpMyAdmin/index.php?login=1&post_login=95105964238457');
+                      console.error('Error:', error)
+                      alert("Error: "+error)
+                    })
+                    .then(resp => {
+                      if(resp.count === undefined){
+                        alert('NO Se ha eliminado rindexaciones, favor eliminarla manualmente desde https://jasolutions.com.co:2083/cpsess8986912440/3rdparty/phpMyAdmin/index.php?login=1&post_login=95105964238457');
+                      }else{
+                        console.log('Se ha eliminado rindexaciones');
+                      }
+                      controllerServices.deleteModel(controllerServices.getEnum().ridiomas, _self.currentId)
+                        .catch(error => {
+                          alert('NO Se ha eliminado la insercion ridiomas, favor eliminarla manualmente desde https://jasolutions.com.co:2083/cpsess8986912440/3rdparty/phpMyAdmin/index.php?login=1&post_login=95105964238457');
+                          console.error('Error:', error)
+                          alert("Error: "+error)
+                        })
+                        .then(resp => {
+                          if(resp.count === undefined){
+                            alert('NO Se ha eliminado la insercion ridiomas, favor eliminarla manualmente desde https://jasolutions.com.co:2083/cpsess8986912440/3rdparty/phpMyAdmin/index.php?login=1&post_login=95105964238457');
+                          }else{
+                            console.log('Se ha eliminado ridiomas');
+                          }
+                          controllerServices.deleteModel(controllerServices.getEnum().revista, _self.currentId)
+                            .catch(error => {
+                              alet('No se ha eliminado Revista, favor eliminarla manualmente desde http://journals-research.com:3000/explorer/');
+                              console.error('Error:', error)
+                              alert("Error: "+error)
+                            })
+                            .then(resp => {
+                              if(resp.count === undefined){
+                                alet('No se ha eliminado Revista, favor eliminarla manualmente desde http://journals-research.com:3000/explorer/');
+                              }else{
+                                console.log('Se ha eliminado Revista');
+                                console.log('Se ha eliminado ridiomas');
+                                alert('Se removieron las inserciones con exito')
+                              }
+                            })
+                        })
+                    }) */
+                })
+            })
+        })
     }
   },
   computed: {

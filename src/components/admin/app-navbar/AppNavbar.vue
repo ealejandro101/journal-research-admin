@@ -7,6 +7,7 @@
     <span slot="center">
       {{$t('navbar.messageUs')}}&nbsp;<a href="mailto:hello@epicmax.co">hello@epicmax.co</a>
     </span>
+    <language-dropdown class="col nav-item"/>
   </vuestic-navbar>
 
 </template>

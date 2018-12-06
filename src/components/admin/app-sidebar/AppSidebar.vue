@@ -5,12 +5,11 @@
         <span slot="title">
           <span
             class="sidebar-menu-item-icon vuestic-icon vuestic-icon-graph"></span>
-          <span>{{ $t('menu.models') }}</span>
+          <span>Admin</span>
         </span>
-        <sidebar-link v-for="(item, index) in models" :key="index"
-          :to="{ path: item.route }">
+        <sidebar-link :to="{ path: '/addJournal' }">
           <span slot="title">
-            <span>{{ item.title }}</span>
+            <span>Insertar Revista</span>
           </span>
         </sidebar-link>
       </sidebar-link-group>
@@ -37,36 +36,6 @@ export default {
     isOpen: {
       type: Boolean,
       required: true
-    }
-  },
-  data () {
-    return {
-      models: []
-    }
-  },
-  created () {
-    let self = this
-    this.$bus.$on('change-lang', function (data) {
-      let jsonModels = jsonTexts.models
-      let index = 0
-      for (const key in jsonModels) {
-        self.models[index]['title'] = this.$t(`models.${key}`)
-        index++
-      }
-    })
-  },
-  mounted () {
-    this.setModels()
-  },
-  methods: {
-    setModels () {
-      let jsonModels = jsonTexts.models
-      for (const key in jsonModels) {
-        this.models.push({
-          'title': this.$t(`models.${key}`),
-          'route': `/crud/${key}`
-        })
-      }
     }
   }
 }

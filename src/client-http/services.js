@@ -1,14 +1,55 @@
 let url = 'http://journals-research.com:3000/api'
 
 let services = {
-  getJournals () {
-    return fetch(`${url}/Revista`, {
+  getEnum () {
+    return Object.freeze({
+      'categoria': 'Categoria',
+      'ciudad': 'Ciudads',
+      'disciplina': 'Disciplinas',
+      'estilocitacion': 'Estilocitacions',
+      'idioma': 'Idiomas',
+      'indexaciones': 'Indexaciones',
+      'licencia': 'Licencia',
+      'pais': 'Pais',
+      'palabraclave': 'Palabraclaves',
+      'palabrasclave': 'Palabrasclaves',
+      'periodicidad': 'Periodicidads',
+      'politicaautoarchivo': 'Politicaautoarchivos',
+      'radicional': 'Radicionals',
+      'rcontacto': 'Rcontactos',
+      'revista': 'Revista',
+      'revistascategorias': null,
+      'ridiomas': 'Ridiomas',
+      'rindexaciones': 'Rindexaciones',
+      'rubicacion': 'Rubicacions',
+      'tiporevisionpares': 'Tiporevisionpares'
+    })
+  },
+  getModels (model) {
+    return fetch(`${url}/${model}`, {
       method: 'GET', // or 'PUT'
       // body: JSON.stringify(data), // data can be `string` or {object}!
       headers: {
         'Content-Type': 'application/json'
       }
     })
+  },
+  postModel (model, data) {
+    return fetch(`${url}/${model}`, {
+      method: 'POST', // or 'PUT'
+      body: JSON.stringify(data), // data can be `string` or {object}!
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+  },
+  deleteModel (model, data) {
+    return fetch(`${url}/${model}/${data}`, {
+      method: 'DELETE', // or 'PUT'
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(response => response.json())
   },
   getJournalsCount () {
     return fetch(`${url}/Revista/count`, {
@@ -19,33 +60,6 @@ let services = {
       }
     })
   },
-  getCategories () {
-    return fetch(`${url}/Categoria`, {
-      method: 'GET', // or 'PUT'
-      // body: JSON.stringify(data), // data can be `string` or {object}!
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-  },
-  getLicense () {
-    return fetch(`${url}/Licencia`, {
-      method: 'GET', // or 'PUT'
-      // body: JSON.stringify(data), // data can be `string` or {object}!
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-  },
-  postJournal (journal) {
-    return fetch(`${url}/Revista`, {
-      method: 'POST', // or 'PUT'
-      body: JSON.stringify(journal), // data can be `string` or {object}!
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-  }
 }
 
 export default services
