@@ -2,167 +2,156 @@ import controllerServices from '../../../client-http/services'
 
 export default {
   crudOfJournal (callbacks) {
-    controllerServices.getModels(controllerServices.getEnum().categoria)
+    let json = {
+      title: 'Revista',
+      inputs: [
+        {
+          label: 'Titulo',
+          placeholder: 'Ingrese el titulo',
+          type: 'text',
+          active: true,
+          id: 'titulo',
+          res: '',
+          name: '',
+          value: ''
+        },
+        {
+          label: 'Subtitulo',
+          placeholder: 'Ingrese el subtitulo',
+          type: 'text',
+          active: true,
+          id: 'subtitulo',
+          res: '',
+          name: '',
+          value: ''
+        },
+        {
+          label: 'Titulo corto',
+          placeholder: 'Ingrese el Titulo corto',
+          type: 'text',
+          active: true,
+          id: 'tituloCorto',
+          res: '',
+          name: '',
+          value: ''
+        },
+        {
+          label: 'doi',
+          placeholder: 'Ingrese el doi',
+          type: 'text',
+          active: true,
+          id: 'doi',
+          res: '',
+          name: '',
+          value: ''
+        },
+        {
+          label: 'eissn',
+          placeholder: 'Ingrese el eissn',
+          type: 'text',
+          active: true,
+          id: 'eissn',
+          res: '',
+          name: '',
+          value: ''
+        },
+        {
+          label: 'issn',
+          placeholder: 'Ingrese el issn',
+          type: 'text',
+          active: true,
+          id: 'issn',
+          res: '',
+          name: '',
+          value: ''
+        },
+        {
+          label: 'imagen',
+          placeholder: 'Ingrese el imagen',
+          type: 'text',
+          active: true,
+          id: 'imagen',
+          res: '',
+          name: '',
+          value: ''
+        },
+        {
+          label: 'descripcion',
+          placeholder: 'Ingrese descripcion',
+          type: 'text',
+          active: true,
+          id: 'descripcion',
+          res: '',
+          name: '',
+          value: ''
+        },
+        {
+          label: 'fechaCreacion',
+          placeholder: 'Ingrese fechaCreacion',
+          type: 'datetime-local',
+          active: true,
+          id: 'fechaCreacion',
+          res: '',
+          name: '',
+          value: ''
+        },
+        {
+          label: 'fechaIngreso',
+          placeholder: 'Ingrese fechaIngreso',
+          type: 'datetime-local',
+          active: true,
+          id: 'fechaIngreso',
+          res: '',
+          name: '',
+          value: ''
+        }
+      ],
+      button: {
+        textButton: 'Insertar',
+        active: true
+      },
+    }
+    controllerServices.getModels(controllerServices.getEnum().licencia)
       .then(response => response.json())
       .catch(error => {
         console.error('Error:', error)
         callbacks(true, error)
       })
-      .then(response => {
-        let json = {
-          title: 'Revista',
-          inputs: [
-            {
-              label: 'Titulo',
-              placeholder: 'Ingrese el titulo',
-              type: 'text',
-              active: true,
-              id: 'titulo',
-              res: '',
-              name: '',
-              value: ''
-            },
-            {
-              label: 'Subtitulo',
-              placeholder: 'Ingrese el subtitulo',
-              type: 'text',
-              active: true,
-              id: 'subtitulo',
-              res: '',
-              name: '',
-              value: ''
-            },
-            {
-              label: 'Titulo corto',
-              placeholder: 'Ingrese el Titulo corto',
-              type: 'text',
-              active: true,
-              id: 'tituloCorto',
-              res: '',
-              name: '',
-              value: ''
-            },
-            {
-              label: 'doi',
-              placeholder: 'Ingrese el doi',
-              type: 'text',
-              active: true,
-              id: 'doi',
-              res: '',
-              name: '',
-              value: ''
-            },
-            {
-              label: 'eissn',
-              placeholder: 'Ingrese el eissn',
-              type: 'text',
-              active: true,
-              id: 'eissn',
-              res: '',
-              name: '',
-              value: ''
-            },
-            {
-              label: 'issn',
-              placeholder: 'Ingrese el issn',
-              type: 'text',
-              active: true,
-              id: 'issn',
-              res: '',
-              name: '',
-              value: ''
-            },
-            {
-              label: 'imagen',
-              placeholder: 'Ingrese el imagen',
-              type: 'text',
-              active: true,
-              id: 'imagen',
-              res: '',
-              name: '',
-              value: ''
-            },
-            {
-              label: 'descripcion',
-              placeholder: 'Ingrese descripcion',
-              type: 'text',
-              active: true,
-              id: 'descripcion',
-              res: '',
-              name: '',
-              value: ''
-            },
-            {
-              label: 'fechaCreacion',
-              placeholder: 'Ingrese fechaCreacion',
-              type: 'datetime-local',
-              active: true,
-              id: 'fechaCreacion',
-              res: '',
-              name: '',
-              value: ''
-            },
-            {
-              label: 'fechaIngreso',
-              placeholder: 'Ingrese fechaIngreso',
-              type: 'datetime-local',
-              active: true,
-              id: 'fechaIngreso',
-              res: '',
-              name: '',
-              value: ''
-            }
-          ]
-        }
-        let inputCategory = {/* Input de opciones */
-          label: 'categoriaId',
-          type: 'radio', /* radio */
+      .then(responseLicense => {
+        let inputLicence = {/* Input de opciones */
+          label: 'licenciaId',
+          type: 'radio',
           active: true,
-          id: 'categoriaId',
+          id: 'licenciaId',
           res: '',
           options: []
         }
-        for (const iterator of response) {
-          inputCategory.options.push({
-            name: 'categoriaId', /* igual en radio */
+        for (const iterator of responseLicense) {
+          inputLicence.options.push({
+            name: 'licenciaId', /* igual en radio */
             value: iterator.id,
             checked: true,
-            text: iterator.nombre
+            text: iterator.licencia
           })
         }
-        json.inputs.push(inputCategory)
-        controllerServices.getModels(controllerServices.getEnum().licencia)
-          .then(response => response.json())
-          .catch(error => {
-            console.error('Error:', error)
-            callbacks(true, error)
-          })
-          .then(responseLicense => {
-            let inputLicence = {/* Input de opciones */
-              label: 'licenciaId',
-              type: 'radio',
-              active: true,
-              id: 'licenciaId',
-              res: '',
-              options: []
-            }
-            for (const iterator of responseLicense) {
-              inputLicence.options.push({
-                name: 'licenciaId', /* igual en radio */
-                value: iterator.id,
-                checked: true,
-                text: iterator.licencia
-              })
-            }
-            json.inputs.push(inputLicence)
-            callbacks(false, json)
-          })
+        json.inputs.push(inputLicence)
+        callbacks(false, json)
       })
   },
   crudOfJContact (callbacks) {
     let json = {
       title: 'RContacto',
       inputs: [
+        {
+          label: 'id',
+          placeholder: 'Ingrese el id de la revista',
+          type: 'number',
+          active: true,
+          id: 'id',
+          res: '',
+          name: '',
+          value: ''
+        },
         {
           label: 'editor',
           placeholder: 'Ingrese el editor',
@@ -213,7 +202,11 @@ export default {
           name: '',
           value: ''
         }
-      ]
+      ],
+      button: {
+        textButton: 'Insertar',
+        active: true
+      },
     }
     callbacks(false, json)
   },
@@ -224,6 +217,16 @@ export default {
     let formFormat = {
       title: 'RAdicional',
       inputs: [
+        {
+          label: 'id',
+          placeholder: 'Ingrese el id de la revista',
+          type: 'number',
+          active: true,
+          id: 'id',
+          res: '',
+          name: '',
+          value: ''
+        },
         {
           label: 'apc',
           placeholder: 'Ingrese el apc',
@@ -364,7 +367,11 @@ export default {
           name: '',
           value: ''
         }
-      ]
+      ],
+      button: {
+        textButton: 'Insertar',
+        active: true
+      },
     }
 
     let inputCitacion = this.getFormatInputOptions()
@@ -494,7 +501,21 @@ export default {
     let formFormat = {
       title: 'RIdioma',
       inputs: [
-      ]
+        {
+          label: 'revistaId',
+          placeholder: 'Ingrese el revistaId',
+          type: 'number',
+          active: true,
+          id: 'revistaId',
+          res: '',
+          name: '',
+          value: ''
+        }
+      ],
+      button: {
+        textButton: 'Insertar',
+        active: true
+      },
     }
 
     let inputIdioma = this.getFormatInputOptions()
@@ -520,6 +541,16 @@ export default {
       title: 'RIndexaciones',
       inputs: [
         {
+          label: 'revistaId',
+          placeholder: 'Ingrese el revistaId',
+          type: 'number',
+          active: true,
+          id: 'revistaId',
+          res: '',
+          name: '',
+          value: ''
+        },
+        {
           label: 'parametro',
           placeholder: 'Ingrese el parametro',
           type: 'text',
@@ -529,7 +560,11 @@ export default {
           name: '',
           value: ''
         }
-      ]
+      ],
+      button: {
+        textButton: 'Insertar',
+        active: true
+      },
     }
 
     let inputIndexacion = this.getFormatInputOptions()
@@ -554,6 +589,16 @@ export default {
     let formFormat = {
       title: 'RUbicacion',
       inputs: [
+        {
+          label: 'id',
+          placeholder: 'Ingrese el id de la revista',
+          type: 'number',
+          active: true,
+          id: 'id',
+          res: '',
+          name: '',
+          value: ''
+        },
         {
           label: 'direccion',
           placeholder: 'Ingrese la direccion',
@@ -584,7 +629,11 @@ export default {
           name: '',
           value: ''
         }
-      ]
+      ],
+      button: {
+        textButton: 'Insertar',
+        active: true
+      },
     }
 
     let inputCity = this.getFormatInputOptions()
@@ -600,6 +649,40 @@ export default {
           return callbacks(true, dataCiudad)
         }
         formFormat.inputs.push(dataCiudad)
+        callbacks(false, formFormat)
+      })
+  },
+  crudOfJournalCategory (callbacks) {
+    let _self = this
+    let formFormat = {
+      title: 'RevistasCategorias',
+      inputs: [
+        {
+          label: 'revistaId',
+          type: 'number',
+          active: true,
+          id: 'revistaId',
+          res: ''
+        }
+      ],
+      button: {
+        textButton: 'Insertar',
+        active: true
+      },
+    }
+    let inputCategory = _self.getFormatInputOptions()
+    inputCategory.label = 'categoriaId'
+    inputCategory.type = 'checkbox'
+    inputCategory.id = 'categoriaId'
+    inputCategory.res = []
+
+    _self.getInputOptions(
+      controllerServices.getEnum().categoria,
+      inputCategory, 'nombre', function (errCat, dataCat) {
+        if (errCat) {
+          return callbacks(true, dataCat)
+        }
+        formFormat.inputs.push(dataCat)
         callbacks(false, formFormat)
       })
   },

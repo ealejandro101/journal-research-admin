@@ -1,4 +1,4 @@
-let url = 'http://journals-research.com:3000/api'
+let url = 'http://localhost:3000/api'
 
 let services = {
   getEnum () {
@@ -18,7 +18,7 @@ let services = {
       'radicional': 'Radicionals',
       'rcontacto': 'Rcontactos',
       'revista': 'Revista',
-      'revistascategorias': null,
+      'revistascategorias': 'RevistasCategorias',
       'ridiomas': 'Ridiomas',
       'rindexaciones': 'Rindexaciones',
       'rubicacion': 'Rubicacions',
