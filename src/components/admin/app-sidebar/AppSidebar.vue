@@ -12,6 +12,11 @@
             <span>Insertar Revista</span>
           </span>
         </sidebar-link>
+        <sidebar-link :to="{ path: '/addDiscipline' }">
+          <span slot="title">
+            <span>Insertar Disciplina</span>
+          </span>
+        </sidebar-link>
       </sidebar-link-group>
     </template>
   </vuestic-sidebar>

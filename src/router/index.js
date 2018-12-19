@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import AppLayout from '../components/admin/AppLayout'
 import lazyLoading from './lazyLoading'
 import Crud from '../components/research/crud/ResearchPageCrud.vue'
+import DisciplineForm from '../components/research/crud/DisciplineForm.vue'
 
 Vue.use(Router)
 
@@ -19,6 +20,10 @@ export default new Router({
     {
       path: '/addJournal',
       component: Crud
+    },
+    {
+      path: '/addDiscipline',
+      component: DisciplineForm
     },
     {
       path: '/404',

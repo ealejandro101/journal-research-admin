@@ -3,16 +3,7 @@
     <app-navbar :isOpen="opened" @toggle-menu="toggleSidebar"/>
     <app-sidebar :isOpen="opened" @toggle-menu="toggleSidebar"/>
     <main slot="content" id="content" class="content" role="main">
-      <div style="position: fixed;background: #fff; border: solid;padding: 1em; z-index: 10;right: 0;">
-        <p v-text="'El ID de la revista actual es = '+currentId"></p>
-      </div>
       <research-form :form="formJournal" @listen:event="sendSection"></research-form>
-      <research-form :form="formJournalCategory" @listen:event="sendSection"></research-form>
-      <research-form :form="formJContact" @listen:event="sendSection"></research-form>
-      <research-form :form="formJAdditional" @listen:event="sendSection"></research-form>
-      <research-form :form="formLocation" @listen:event="sendSection"></research-form>
-      <research-form :form="formIndexing" @listen:event="sendSection"></research-form>
-      <research-form :form="formLanguage" @listen:event="sendSection"></research-form>
     </main>
     <span slot="footer">©2018. Made by&nbsp;<a href="https://epicmax.co" target="_blank">Epicmax </a></span>
   </vuestic-layout>
@@ -44,12 +35,6 @@ export default {
     return {
       opened: true,
       formJournal: undefined,
-      formJournalCategory: undefined,
-      formJContact: undefined,
-      formJAdditional: undefined,
-      formLanguage: undefined,
-      formIndexing: undefined,
-      formLocation: undefined,
       currentId: undefined
     }
   },
@@ -61,49 +46,7 @@ export default {
         alert(dataJournal)
         return
       }
-      controllerCrud.crudOfJContact(function (errContact, dataContact) {
-        if (errContact) {
-          alert(dataContact)
-          return
-        }
-        controllerCrud.crudOfJAdditional(function (errAdd, dataAdd) {
-          if (errAdd) {
-            alert(dataAdd)
-            return
-          }
-          controllerCrud.crudOfJLanguage(function (errLan, dataLan) {
-            if (errAdd) {
-              alert(dataAdd)
-              return
-            }
-            controllerCrud.crudOfJIndexing(function (errInd, dataInd) {
-              if (errAdd) {
-                alert(dataAdd)
-                return
-              }
-              controllerCrud.crudOfJLocation(function (errLoc, dataLoc) {
-                if (errAdd) {
-                  alert(dataAdd)
-                  return
-                }
-                controllerCrud.crudOfJournalCategory(function (errRevCat, dataRevCat) {
-                  if (errRevCat) {
-                    alert(dataRevCat)
-                    return
-                  }
-                  _self.formJournal = dataJournal
-                  _self.formJournalCategory = dataRevCat
-                  _self.formJContact = dataContact
-                  _self.formJAdditional = dataAdd
-                  _self.formLanguage = dataLan
-                  _self.formIndexing = dataInd
-                  _self.formLocation = dataLoc
-                })
-              })
-            })
-          })
-        })
-      })
+      _self.formJournal = dataJournal
     })
   },
   methods: {

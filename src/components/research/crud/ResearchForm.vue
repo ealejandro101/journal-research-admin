@@ -18,7 +18,7 @@
                                     <label :for="item.id" v-text="item.label" class="textAlignLeft d-block"></label>
                                     <input v-if="item.type != 'radio' && item.type != 'checkbox'" :type="item.type" class="form-control"
                                             :id="item.id" :placeholder="item.placeholder"
-                                            v-model="item.res">
+                                            v-model="item.res" :required="item.required">
                                     <div v-else>
                                         <div v-for="(option, oindex) in item.options" :key="oindex" class="d-flex inputOption">
                                             <input :type="item.type" class="form-check-input"
@@ -26,6 +26,7 @@
                                                 :checked="option.checked"
                                                 :value="option.value"
                                                 :id="oindex"
+                                                :required="item.required"
                                                 v-model="item.res"> {{option.text}}
                                         </div>
 
