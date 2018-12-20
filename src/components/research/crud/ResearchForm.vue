@@ -129,7 +129,7 @@ export default {
           this.form.inputs.push({
             label: this.form.inputs[37].options[iterator - 1].text,
             required: true,
-            placeholder: 'Ingrese el parametro ' + this.form.inputs[37].options[iterator - 1].text,
+            placeholder: 'Ingrese la URL de ' + this.form.inputs[37].options[iterator - 1].text,
             type: 'text',
             active: true,
             id: 'parametro' + this.form.inputs[37].options[iterator - 1].text,
