@@ -13,12 +13,18 @@
                     </div>
                     <div class="row">
                         <div class="col">
-                            <form v-on:submit.prevent="">
+                            <form v-on:submit.prevent="acton_event">
                                 <div v-for="(item, index) in form.inputs" class="form-group d-flow-root" v-if="item.active" :key="index">
                                     <label :for="item.id" v-text="item.label" class="textAlignLeft d-block"></label>
-                                    <input v-if="item.type != 'radio' && item.type != 'checkbox'" :type="item.type" class="form-control"
+                                    <div v-if="item.required && item.res.length == 0" style="color: red" class="isNecessary">Es necesario llenar este campo</div>
+                                    <input v-if="item.type != 'radio' && item.type != 'checkbox' && item.type != 'select'" :type="item.type" class="form-control"
                                             :id="item.id" :placeholder="item.placeholder"
-                                            v-model="item.res" :required="item.required">
+                                            v-model="item.res" :required="item.required" :value="item.value">
+                                    <select v-else-if="item.type == 'select'" @change="selectOption(item)" :id="item.id" v-model="item.res" :required="item.required">
+                                        <option v-for="(option, oindex) in item.options" :key="oindex" 
+                                            :value="option.value"
+                                            v-text="option.text"></option>
+                                    </select>
                                     <div v-else>
                                         <div v-for="(option, oindex) in item.options" :key="oindex" class="d-flex inputOption">
                                             <input :type="item.type" class="form-check-input"
@@ -26,14 +32,12 @@
                                                 :checked="option.checked"
                                                 :value="option.value"
                                                 :id="oindex"
-                                                :required="item.required"
-                                                v-model="item.res"> {{option.text}}
+                                                v-model="item.res" @change="selectOption(item)"> {{option.text}}
                                         </div>
-
                                     </div>
                                 </div>
-                                <button @click="acton_event_aux" v-if="form.button_aux !== undefined && form.button_aux.active" class="btn btn-secondary" v-text="form.button_aux.textButton"></button>
-                                <button @click="acton_event" v-if="form.button !== undefined && form.button.active" class="btn btn-secondary" v-text="form.button.textButton"></button>
+                                <input type="submit" v-if="form.button_aux !== undefined && form.button_aux.active" class="btn btn-secondary" v-text="form.button_aux.textButton">
+                                <input type="submit" v-if="form.button !== undefined && form.button.active" class="btn btn-secondary" v-text="form.button.textButton">
                             </form>
                             <hr />
                         </div>
@@ -58,6 +62,8 @@
 </template>
 
 <script>
+import controllerServices from '../../../client-http/services'
+
 export default {
   name: 'ECSRespondent',
   props: {
@@ -94,7 +100,7 @@ export default {
   },
   data () {
     return {
-
+        auxIndex: []
     }
   },
   methods: {
@@ -108,8 +114,64 @@ export default {
       return jsonResponse
     },
     acton_event: function () {
-      let jsonResponse = this.getJsonResponse()
-      this.$emit('listen:event', { id: this.form.title, data: jsonResponse })
+        if(document.getElementsByClassName('isNecessary').length > 0){
+            alert("Te falta llenar algunos campos")
+            return
+        }
+        let jsonResponse = this.getJsonResponse()
+        this.$emit('listen:event', { id: this.form.title, data: jsonResponse, auxIndex: this.auxIndex })
+    },
+    selectOption (item) {
+        if(item.id == "indexacionesId"){
+            this.form.inputs.splice(45, this.form.inputs.length-45);
+            this.auxIndex = []
+            for (const iterator of this.form.inputs[37].res) {
+                this.form.inputs.push({
+                    label: this.form.inputs[37].options[iterator - 1].text,
+                    required: true,
+                    placeholder: 'Ingrese el parametro '+this.form.inputs[37].options[iterator - 1].text,
+                    type: 'text',
+                    active: true,
+                    id: 'parametro'+this.form.inputs[37].options[iterator - 1].text,
+                    res: '',
+                    name: '',
+                    value: ''
+                })
+                this.auxIndex[this.form.inputs[37].options[iterator - 1].value] = 'parametro'+this.form.inputs[37].options[iterator - 1].text
+            }
+        }
+        if(item.id == "pais"){
+            controllerServices.getModelsFilter(controllerServices.getEnum().estado, {"where": {"country_id": this.form.inputs[31].res}})
+                .then(response => response.json())
+                .catch(error => {
+                    console.error('Error:', error)
+                    alert('Error: ' + error)
+                }).then(response => {
+                    this.form.inputs[32].options = []
+                    for (const iterator of response) {
+                        this.form.inputs[32].options.push({
+                            value: iterator.id,
+                            text: iterator.name
+                        })
+                    }
+                })
+        }
+        if(item.id == "estado"){
+            controllerServices.getModelsFilter(controllerServices.getEnum().ciudad, {"where": {"state_id": this.form.inputs[32].res}})
+                .then(response => response.json())
+                .catch(error => {
+                    console.error('Error:', error)
+                    alert('Error: ' + error)
+                }).then(response => {
+                    this.form.inputs[33].options = []
+                    for (const iterator of response) {
+                        this.form.inputs[33].options.push({
+                            value: iterator.id,
+                            text: iterator.name
+                        })
+                    }
+                })
+        }
     }
   }
 }

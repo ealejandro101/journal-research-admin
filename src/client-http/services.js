@@ -5,6 +5,7 @@ let services = {
     return Object.freeze({
       'categoria': 'Categoria',
       'ciudad': 'Ciudads',
+      'estado': 'Estados',
       'disciplina': 'Disciplinas',
       'estilocitacion': 'Estilocitacions',
       'idioma': 'Idiomas',
@@ -27,6 +28,15 @@ let services = {
   },
   getModels (model) {
     return fetch(`${url}/${model}`, {
+      method: 'GET', // or 'PUT'
+      // body: JSON.stringify(data), // data can be `string` or {object}!
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+  },
+  getModelsFilter (model, filter) {
+    return fetch(`${url}/${model}?filter=${JSON.stringify(filter)}`, {
       method: 'GET', // or 'PUT'
       // body: JSON.stringify(data), // data can be `string` or {object}!
       headers: {

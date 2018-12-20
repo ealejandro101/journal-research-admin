@@ -1,12 +1,14 @@
 import controllerServices from '../../../client-http/services'
+import moment from 'moment'
 
 export default {
   crudOfJournal (callbacks) {
+    let diaActual = moment().format().substring(0, 16)
     let formFormat = {
       title: 'Revista',
       inputs: [
         {
-          label: 'Titulo*',
+          label: 'Titulo*', // 0
           required: true,
           placeholder: 'Ingrese el titulo',
           type: 'text',
@@ -17,7 +19,7 @@ export default {
           value: ''
         },
         {
-          label: 'Subtitulo',
+          label: 'Subtitulo', // 1
           required: false,
           placeholder: 'Ingrese el subtitulo',
           type: 'text',
@@ -28,7 +30,7 @@ export default {
           value: ''
         },
         {
-          label: 'Titulo corto',
+          label: 'Titulo corto', // 2
           required: false,
           placeholder: 'Ingrese el Titulo corto',
           type: 'text',
@@ -39,7 +41,7 @@ export default {
           value: ''
         },
         {
-          label: 'Año de creación de la revista*',
+          label: 'Año de creación de la revista*', // 3
           required: true,
           placeholder: 'Ingrese fecha de creacion',
           type: 'datetime-local',
@@ -50,7 +52,7 @@ export default {
           value: ''
         },
         {
-          label: 'ISSN',
+          label: 'ISSN', // 4
           required: false,
           placeholder: 'Ingrese el ISSN de su revista (Versión impresa)',
           type: 'text',
@@ -61,7 +63,7 @@ export default {
           value: ''
         },
         {
-          label: 'EISSN',
+          label: 'EISSN', // 5
           required: false,
           placeholder: 'Ingrese el ISSN electrónico de su revista',
           type: 'text',
@@ -72,7 +74,7 @@ export default {
           value: ''
         },
         {
-          label: 'DOI',
+          label: 'DOI', // 6
           required: false,
           placeholder: 'Ingrese el DOI de su revista - 10.xxxx',
           type: 'text',
@@ -83,7 +85,7 @@ export default {
           value: ''
         },
         {
-          label: 'Descripción de la revista',
+          label: 'Descripción de la revista', // 7
           required: false,
           placeholder: 'Incluya política editorial (objetivo y alcance)',
           type: 'text',
@@ -94,7 +96,7 @@ export default {
           value: ''
         },
         {
-          label: 'Guía para autores*',
+          label: 'Guía para autores*', // 8
           required: true,
           placeholder: 'Ingrese la url de la guía para autores',
           type: 'text',
@@ -105,7 +107,7 @@ export default {
           value: ''
         },
         {
-          label: 'Equipo editorial*',
+          label: 'Equipo editorial*', // 9
           required: true,
           placeholder: 'Ingrese la url donde se encuentra el equipo editorial de la revista',
           type: 'text',
@@ -116,7 +118,7 @@ export default {
           value: ''
         },
         {
-          label: 'Código de ética*',
+          label: 'Código de ética*', // 10
           required: true,
           placeholder: 'Ingrese url donde se encuentra el código de la revista',
           type: 'text',
@@ -127,7 +129,7 @@ export default {
           value: ''
         },
         {
-          label: 'Ingrese la periodicidad de su revista*',
+          label: 'Ingrese la periodicidad de su revista*', // 11
           type: 'radio',
           required: true,
           active: true,
@@ -136,7 +138,16 @@ export default {
           options: []
         },
         {
-          label: 'Ingrese la periodicidad de su revista*',
+          label: 'Ingrese la periodicidad de su revista en caso de ser diferente*', // 12
+          type: 'text',
+          required: false,
+          active: true,
+          id: 'periodicidadOtro',
+          res: '',
+          options: []
+        },
+        {
+          label: 'Tipo de revisión por pares *', // 13
           type: 'radio',
           required: true,
           active: true,
@@ -145,61 +156,62 @@ export default {
           options: []
         },
         {
-          label: 'Seleccione la(s) catergoria(s) a las cuales pertenece su revista*',
+          label: 'Seleccione la(s) catergoria(s) a las cuales pertenece su revista*', // 14
           required: true,
           type: 'checkbox',
           active: true,
           id: 'categoriaId',
-          res: '',
+          res: [],
           options: []
         },
         {
-          label: 'Escoja la disciplina de su revista*',
+          label: 'Escoja la disciplina de su revista*', // 15
           required: true,
-          type: 'checkbox',
+          type: 'select',
           active: true,
           id: 'disciplinaId',
           res: '',
           options: []
         },
         {
-          label: 'Escoja la disciplina 1 de su revista*',
+          label: 'Escoja la disciplina 1 de su revista', // 16
           required: false,
-          type: 'checkbox',
+          type: 'select',
           active: true,
           id: 'disciplinaId1',
           res: '',
           options: []
         },
         {
-          label: 'Escoja la disciplina 2 de su revista*',
+          label: 'Escoja la disciplina 2 de su revista', // 17
           required: false,
-          type: 'checkbox',
+          type: 'select',
           active: true,
           id: 'disciplinaId2',
           res: '',
           options: []
         },
         {
-          label: 'Escoja la disciplina 3 de su revista*',
+          label: 'Escoja la disciplina 3 de su revista', // 18
           required: false,
-          type: 'checkbox',
+          type: 'select',
           active: true,
           id: 'disciplinaId3',
           res: '',
           options: []
         },
         {
-          label: 'Seleccione el (los) idioma (s) en los cuales publica la revista*',
+          label: 'Seleccione el (los) idioma (s) en los cuales publica la revista*', // 19
           required: true,
           type: 'checkbox',
           active: true,
           id: 'idiomaId',
-          res: '',
+          res: [],
           options: []
         },
         {
-          label: 'Licencia Creative Commons *',
+          label: 'Licencia Creative Commons *', // 20
+          required: true,
           type: 'radio',
           active: true,
           id: 'licenciaId',
@@ -207,17 +219,26 @@ export default {
           options: []
         },
         {
-          label: 'APC',
+          label: 'APC', // 21
+          required: true,
           placeholder: 'Ingrese el apc*',
-          type: 'number',
+          type: 'select',
           active: true,
           id: 'apc',
           res: '',
-          name: '',
-          value: ''
+          options: [
+            {
+              value: '1',
+              text: 'Si'
+            },
+            {
+              value: '0',
+              text: 'No'
+            }
+          ]
         },
         {
-          label: 'Política de Autoarchivo*',
+          label: 'Política de Autoarchivo*', // 22
           required: true,
           type: 'radio',
           active: true,
@@ -226,7 +247,7 @@ export default {
           options: []
         },
         {
-          label: 'OAI-PMH*',
+          label: 'OAI-PMH*', // 23
           required: true,
           placeholder: 'Ingrese la ulr del OAI de la revista',
           type: 'text',
@@ -237,17 +258,25 @@ export default {
           value: ''
         },
         {
-          label: 'Su revista acepta PrePrint?',
+          label: 'Su revista acepta PrePrint?', // 24
           placeholder: 'Ingrese preprint',
-          type: 'number',
+          type: 'select',
           active: true,
           id: 'preprint',
           res: '',
-          name: '',
-          value: ''
+          options: [
+            {
+              value: '1',
+              text: 'Si'
+            },
+            {
+              value: '0',
+              text: 'No'
+            }
+          ]
         },
         {
-          label: 'Estilo de citación*',
+          label: 'Estilo de citación*', // 25
           required: true,
           type: 'radio',
           active: true,
@@ -256,7 +285,7 @@ export default {
           options: []
         },
         {
-          label: 'Correo electrónico*',
+          label: 'Correo electrónico*', // 26
           required: true,
           placeholder: 'Ingrese el email de la revista',
           type: 'mail',
@@ -267,7 +296,7 @@ export default {
           value: ''
         },
         {
-          label: 'Editor *',
+          label: 'Editor *', // 27
           required: true,
           placeholder: 'Ingrese el nombre del editor de la revista',
           type: 'text',
@@ -278,7 +307,7 @@ export default {
           value: ''
         },
         {
-          label: 'OrcID',
+          label: 'OrcID', // 28
           required: false,
           placeholder: 'ingrese el OrcID del editor',
           type: 'text',
@@ -289,7 +318,7 @@ export default {
           value: ''
         },
         {
-          label: 'Google Scholar',
+          label: 'Google Scholar', // 29
           required: false,
           placeholder: 'ingrese la url del Google Scholar del editor',
           type: 'text',
@@ -300,7 +329,7 @@ export default {
           value: ''
         },
         {
-          label: 'Institución (facultad, institución)*',
+          label: 'Institución (facultad, institución)*', // 30
           required: true,
           placeholder: 'Ingrese el nombre de la Institución a la cual pertenece la revista',
           type: 'text',
@@ -311,25 +340,34 @@ export default {
           value: ''
         },
         {
-          label: 'País *',
+          label: 'País *', // 31
           required: true,
-          type: 'radio',
+          type: 'select',
           active: true,
-          id: 'pais#############',
+          id: 'pais',
           res: '',
           options: []
         },
         {
-          label: 'Ciudad*',
+          label: 'Estado *', // 32
           required: true,
-          type: 'radio',
+          type: 'select',
+          active: true,
+          id: 'estado',
+          res: '',
+          options: []
+        },
+        {
+          label: 'Ciudad*', // 33
+          required: true,
+          type: 'select',
           active: true,
           id: 'ciudadId',
           res: '',
           options: []
         },
         {
-          label: 'Teléfono',
+          label: 'Teléfono', // 34
           required: false,
           placeholder: 'Ingrese el telefono',
           type: 'text',
@@ -340,7 +378,7 @@ export default {
           value: ''
         },
         {
-          label: 'Dirección',
+          label: 'Dirección', // 35
           required: false,
           placeholder: 'Ingrese la direccion',
           type: 'text',
@@ -351,7 +389,7 @@ export default {
           value: ''
         },
         {
-          label: 'URL de la revista *',
+          label: 'URL de la revista *', // 36
           required: true,
           placeholder: 'Ingrese url',
           type: 'text',
@@ -362,27 +400,16 @@ export default {
           value: ''
         },
         {
-          label: 'Indexaciones *',
+          label: 'Indexaciones *', // 37
           required: true,
-          type: 'radio',
+          type: 'checkbox',
           active: true,
           id: 'indexacionesId',
-          res: '',
+          res: [],
           options: []
         },
         {
-          label: 'parametro', // //////////////////////////////////////////////////////////////////////////
-          required: true,
-          placeholder: 'Ingrese el parametro',
-          type: 'text',
-          active: true,
-          id: 'parametro',
-          res: '',
-          name: '',
-          value: ''
-        },
-        {
-          label: 'Google Scholar Revista',
+          label: 'Google Scholar Revista', // 38
           required: false,
           placeholder: 'Ingrese el googlescholar',
           type: 'text',
@@ -393,7 +420,7 @@ export default {
           value: ''
         },
         {
-          label: 'Facebook',
+          label: 'Facebook', // 39
           required: false,
           placeholder: 'Ingrese la URL del facebook de la revista',
           type: 'text',
@@ -404,7 +431,7 @@ export default {
           value: ''
         },
         {
-          label: 'Twitter',
+          label: 'Twitter', // 40
           required: false,
           placeholder: 'ngrese la URL del twitter de la revista',
           type: 'text',
@@ -415,7 +442,7 @@ export default {
           value: ''
         },
         {
-          label: 'Instagram',
+          label: 'Instagram', // 41
           required: false,
           placeholder: 'Ingrese instagram',
           type: 'text',
@@ -426,7 +453,7 @@ export default {
           value: ''
         },
         {
-          label: 'Imagen de la revista',
+          label: 'Imagen de la revista', // 42
           required: false,
           placeholder: 'Ingrese la url de la última caratula o logo de la revista',
           type: 'text',
@@ -437,7 +464,7 @@ export default {
           value: ''
         },
         {
-          label: 'Video de la revista',
+          label: 'Video de la revista', // 43
           required: false,
           placeholder: 'Ingresa en enlace (Youtube, Vimeo) del video promocional de su revista (en caso de tenerlo)',
           type: 'text',
@@ -448,14 +475,145 @@ export default {
           value: ''
         },
         {
-          label: 'fechaIngreso',
+          label: 'fechaIngreso', // 44
+          required: false,
           placeholder: 'Ingrese fechaIngreso',
           type: 'datetime-local',
           active: true,
           id: 'fechaIngreso',
+          res: diaActual,
+          name: '',
+          value: diaActual
+        },
+        {
+          label: 'Zipcode', // 45
+          required: false,
+          placeholder: 'Ingrese el zipcode',
+          type: 'text',
+          active: true,
+          id: 'zipcode',
           res: '',
           name: '',
           value: ''
+        },
+      ],
+      button: {
+        textButton: 'Insertar',
+        active: true
+      },
+    }
+    let _self = this
+    _self.getInputOptions(
+      controllerServices.getEnum().licencia,
+      formFormat.inputs[20], 'licencia', function (errLicen, dataLicen) {
+        if (errLicen) {
+          return callbacks(true, dataLicen)
+        }
+        _self.getInputOptions(
+          controllerServices.getEnum().estilocitacion,
+          formFormat.inputs[25], 'estiloCitacion', function (errLicit, dataLicit) {
+            if (errLicit) {
+              return callbacks(true, dataLicit)
+            }
+            _self.getInputOptions(
+              controllerServices.getEnum().periodicidad,
+              formFormat.inputs[11], 'periodicidad', function (errPeriod, dataPeriod) {
+                if (errPeriod) {
+                  return callbacks(true, dataPeriod)
+                }
+                _self.getInputOptions(
+                  controllerServices.getEnum().politicaautoarchivo,
+                  formFormat.inputs[22], 'politicaAutoarchivo', function (errAArch, dataAArch) {
+                    if (errAArch) {
+                      return callbacks(true, dataAArch)
+                    }
+                    _self.getInputOptions(
+                      controllerServices.getEnum().tiporevisionpares,
+                      formFormat.inputs[13], 'tipoRevisionPares', function (errRev, dataRev) {
+                        if (errRev) {
+                          return callbacks(true, dataRev)
+                        }
+                        _self.getInputOptions(
+                          controllerServices.getEnum().disciplina,
+                          formFormat.inputs[15], 'disciplina', function (errDis, dataDis) {
+                            if (errDis) {
+                              return callbacks(true, dataDis)
+                            }
+                            _self.getInputOptions(
+                              controllerServices.getEnum().disciplina,
+                              formFormat.inputs[16], 'disciplina', function (errDis1, dataDis1) {
+                                if (errDis1) {
+                                  return callbacks(true, dataDis1)
+                                }
+                                _self.getInputOptions(
+                                  controllerServices.getEnum().disciplina,
+                                  formFormat.inputs[17], 'disciplina', function (errDis2, dataDis2) {
+                                    if (errDis2) {
+                                      return callbacks(true, dataDis2)
+                                    }
+                                    _self.getInputOptions(
+                                      controllerServices.getEnum().disciplina,
+                                      formFormat.inputs[18], 'disciplina', function (errDis3, dataDis3) {
+                                        if (errDis3) {
+                                          return callbacks(true, dataDis3)
+                                        }
+                                        _self.getInputOptions(
+                                          controllerServices.getEnum().idioma,
+                                          formFormat.inputs[19], 'idioma', function (errIdioma, dataIdioma) {
+                                            if (errIdioma) {
+                                              return callbacks(true, dataIdioma)
+                                            }
+                                          })
+                                        _self.getInputOptions(
+                                          controllerServices.getEnum().indexaciones,
+                                          formFormat.inputs[37], 'indexaciones', function (errIndexacion, dataIndexacion) {
+                                            if (errIndexacion) {
+                                              return callbacks(true, dataIndexacion)
+                                            }
+                                            _self.getInputOptions(
+                                              controllerServices.getEnum().pais,
+                                              formFormat.inputs[31], 'name', function (errPais, dataPais) {
+                                                if (errPais) {
+                                                  return callbacks(true, dataPais)
+                                                }
+                                                _self.getInputOptions(
+                                                  controllerServices.getEnum().categoria,
+                                                  formFormat.inputs[14], 'nombre', function (errCat, dataCat) {
+                                                    if (errCat) {
+                                                      return callbacks(true, dataCat)
+                                                    }
+                                                    callbacks(false, formFormat)
+                                                  })
+                                              })
+                                          })
+                                      }
+                                    )
+                                  }
+                                )
+                              }
+                            )
+                          }
+                        )
+                      }
+                    )
+                  }
+                )
+              }
+            )
+          })
+      })
+  },
+  crudOfDiscipline (callbacks) {
+    let formFormat = {
+      title: 'Discipina',
+      inputs: [
+        {
+          label: 'Disciplina',
+          type: 'text',
+          active: true,
+          id: 'disciplina',
+          placeholder: 'Ingrese el nombre de la Disciplina',
+          res: ''
         }
       ],
       button: {
@@ -464,128 +622,6 @@ export default {
       },
     }
     callbacks(false, formFormat)
-    let _self = this
-    controllerServices.getModels(controllerServices.getEnum().licencia)
-      .then(response => response.json())
-      .catch(error => {
-        console.error('Error:', error)
-        callbacks(true, error)
-      })
-      .then(responseLicense => {
-        let inputLicence = {/* Input de opciones */
-          label: 'licenciaId',
-          type: 'radio',
-          active: true,
-          id: 'licenciaId',
-          res: '',
-          options: []
-        }
-        for (const iterator of responseLicense) {
-          inputLicence.options.push({
-            name: 'licenciaId', /* igual en radio */
-            value: iterator.id,
-            checked: true,
-            text: iterator.licencia
-          })
-        }
-      /* _self.getInputOptions(
-        controllerServices.getEnum().estilocitacion,
-        inputCitacion, 'estiloCitacion', function (errLicit, dataLicit) {
-          if (errLicit) {
-            return callbacks(true, dataLicit)
-          }
-          _self.getInputOptions(
-            controllerServices.getEnum().periodicidad,
-            inputPeriodicidad, 'periodicidad', function (errPeriod, dataPeriod) {
-              if (errPeriod) {
-                return callbacks(true, dataPeriod)
-              }
-              _self.getInputOptions(
-                controllerServices.getEnum().politicaautoarchivo,
-                inputAutoarchivo, 'politicaAutoarchivo', function (errAArch, dataAArch) {
-                  if (errAArch) {
-                    return callbacks(true, dataAArch)
-                  }
-                  _self.getInputOptions(
-                    controllerServices.getEnum().tiporevisionpares,
-                    inputRevisionPares, 'tipoRevisionPares', function (errRev, dataRev) {
-                      if (errRev) {
-                        return callbacks(true, dataRev)
-                      }
-                      _self.getInputOptions(
-                        controllerServices.getEnum().disciplina,
-                        inputDiscipline, 'disciplina', function (errDis, dataDis) {
-                          if (errDis) {
-                            return callbacks(true, dataDis)
-                          }
-                          _self.getInputOptions(
-                            controllerServices.getEnum().disciplina,
-                            inputDiscipline1, 'disciplina', function (errDis1, dataDis1) {
-                              if (errDis1) {
-                                return callbacks(true, dataDis1)
-                              }
-                              _self.getInputOptions(
-                                controllerServices.getEnum().disciplina,
-                                inputDiscipline2, 'disciplina', function (errDis2, dataDis2) {
-                                  if (errDis2) {
-                                    return callbacks(true, dataDis2)
-                                  }
-                                  _self.getInputOptions(
-                                    controllerServices.getEnum().disciplina,
-                                    inputDiscipline3, 'disciplina', function (errDis3, dataDis3) {
-                                      if (errDis3) {
-                                        return callbacks(true, dataDis3)
-                                      }
-                                      _self.getInputOptions(
-                                        controllerServices.getEnum().idioma,
-                                        inputIdioma, 'idioma', function (errIdioma, dataIdioma) {
-                                          if (errIdioma) {
-                                            return callbacks(true, dataIdioma)
-                                          }
-                                          formFormat.inputs.push(dataIdioma)
-                                          callbacks(false, formFormat)
-                                        })
-                                        _self.getInputOptions(
-                                          controllerServices.getEnum().indexaciones,
-                                          inputIndexacion, 'indexaciones', function (errIndexacion, dataIndexacion) {
-                                            if (errIndexacion) {
-                                              return callbacks(true, dataIndexacion)
-                                            }
-                                            formFormat.inputs.push(dataIndexacion)
-                                            _self.getInputOptions(
-                                              controllerServices.getEnum().ciudad,
-                                              inputCity, 'ciudad', function (errCiudad, dataCiudad) {
-                                                if (errCiudad) {
-                                                  return callbacks(true, dataCiudad)
-                                                }
-                                                formFormat.inputs.push(dataCiudad)
-                                                _self.getInputOptions(
-                                                  controllerServices.getEnum().categoria,
-                                                  inputCategory, 'nombre', function (errCat, dataCat) {
-                                                    if (errCat) {
-                                                      return callbacks(true, dataCat)
-                                                    }
-                                                    formFormat.inputs.push(dataCat)
-                                                    callbacks(false, formFormat)
-                                                  })
-                                              })
-                                          })
-                                    }
-                                  )
-                                }
-                              )
-                            }
-                          )
-                        }
-                      )
-                    }
-                  )
-                }
-              )
-            }
-          )
-        }) */
-      })
   },
   getInputOptions (model, input, text, callbacks) {
     // model de la bd, text de las opciones
@@ -610,3 +646,16 @@ export default {
       })
   }
 }
+
+/*
+{
+  label: 'parametro', // //////////////////////////////////////////////////////////////////////////36
+  required: true,
+  placeholder: 'Ingrese el parametro',
+  type: 'text',
+  active: true,
+  id: 'parametro',
+  res: '',
+  name: '',
+  value: ''
+} */
