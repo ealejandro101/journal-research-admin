@@ -21,7 +21,7 @@
                                             :id="item.id" :placeholder="item.placeholder"
                                             v-model="item.res" :required="item.required" :value="item.value">
                                     <select v-else-if="item.type == 'select'" @change="selectOption(item)" :id="item.id" v-model="item.res" :required="item.required">
-                                        <option v-for="(option, oindex) in item.options" :key="oindex" 
+                                        <option v-for="(option, oindex) in item.options" :key="oindex"
                                             :value="option.value"
                                             v-text="option.text"></option>
                                     </select>
@@ -100,7 +100,7 @@ export default {
   },
   data () {
     return {
-        auxIndex: []
+      auxIndex: []
     }
   },
   methods: {
@@ -114,64 +114,64 @@ export default {
       return jsonResponse
     },
     acton_event: function () {
-        if(document.getElementsByClassName('isNecessary').length > 0){
-            alert("Te falta llenar algunos campos")
-            return
-        }
-        let jsonResponse = this.getJsonResponse()
-        this.$emit('listen:event', { id: this.form.title, data: jsonResponse, auxIndex: this.auxIndex })
+      if (document.getElementsByClassName('isNecessary').length > 0) {
+        alert('Te falta llenar algunos campos')
+        return
+      }
+      let jsonResponse = this.getJsonResponse()
+      this.$emit('listen:event', { id: this.form.title, data: jsonResponse, auxIndex: this.auxIndex })
     },
     selectOption (item) {
-        if(item.id == "indexacionesId"){
-            this.form.inputs.splice(45, this.form.inputs.length-45);
-            this.auxIndex = []
-            for (const iterator of this.form.inputs[37].res) {
-                this.form.inputs.push({
-                    label: this.form.inputs[37].options[iterator - 1].text,
-                    required: true,
-                    placeholder: 'Ingrese el parametro '+this.form.inputs[37].options[iterator - 1].text,
-                    type: 'text',
-                    active: true,
-                    id: 'parametro'+this.form.inputs[37].options[iterator - 1].text,
-                    res: '',
-                    name: '',
-                    value: ''
-                })
-                this.auxIndex[this.form.inputs[37].options[iterator - 1].value] = 'parametro'+this.form.inputs[37].options[iterator - 1].text
+      if (item.id == 'indexacionesId') {
+        this.form.inputs.splice(46, this.form.inputs.length - 46)
+        this.auxIndex = []
+        for (const iterator of this.form.inputs[37].res) {
+          this.form.inputs.push({
+            label: this.form.inputs[37].options[iterator - 1].text,
+            required: true,
+            placeholder: 'Ingrese el parametro ' + this.form.inputs[37].options[iterator - 1].text,
+            type: 'text',
+            active: true,
+            id: 'parametro' + this.form.inputs[37].options[iterator - 1].text,
+            res: '',
+            name: '',
+            value: ''
+          })
+          this.auxIndex[this.form.inputs[37].options[iterator - 1].value] = 'parametro' + this.form.inputs[37].options[iterator - 1].text
+        }
+      }
+      if (item.id == 'pais') {
+        controllerServices.getModelsFilter(controllerServices.getEnum().estado, { 'where': { 'country_id': this.form.inputs[31].res } })
+          .then(response => response.json())
+          .catch(error => {
+            console.error('Error:', error)
+            alert('Error: ' + error)
+          }).then(response => {
+            this.form.inputs[32].options = []
+            for (const iterator of response) {
+              this.form.inputs[32].options.push({
+                value: iterator.id,
+                text: iterator.name
+              })
             }
-        }
-        if(item.id == "pais"){
-            controllerServices.getModelsFilter(controllerServices.getEnum().estado, {"where": {"country_id": this.form.inputs[31].res}})
-                .then(response => response.json())
-                .catch(error => {
-                    console.error('Error:', error)
-                    alert('Error: ' + error)
-                }).then(response => {
-                    this.form.inputs[32].options = []
-                    for (const iterator of response) {
-                        this.form.inputs[32].options.push({
-                            value: iterator.id,
-                            text: iterator.name
-                        })
-                    }
-                })
-        }
-        if(item.id == "estado"){
-            controllerServices.getModelsFilter(controllerServices.getEnum().ciudad, {"where": {"state_id": this.form.inputs[32].res}})
-                .then(response => response.json())
-                .catch(error => {
-                    console.error('Error:', error)
-                    alert('Error: ' + error)
-                }).then(response => {
-                    this.form.inputs[33].options = []
-                    for (const iterator of response) {
-                        this.form.inputs[33].options.push({
-                            value: iterator.id,
-                            text: iterator.name
-                        })
-                    }
-                })
-        }
+          })
+      }
+      if (item.id == 'estado') {
+        controllerServices.getModelsFilter(controllerServices.getEnum().ciudad, { 'where': { 'state_id': this.form.inputs[32].res } })
+          .then(response => response.json())
+          .catch(error => {
+            console.error('Error:', error)
+            alert('Error: ' + error)
+          }).then(response => {
+            this.form.inputs[33].options = []
+            for (const iterator of response) {
+              this.form.inputs[33].options.push({
+                value: iterator.id,
+                text: iterator.name
+              })
+            }
+          })
+      }
     }
   }
 }

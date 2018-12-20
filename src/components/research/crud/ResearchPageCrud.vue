@@ -59,7 +59,6 @@ export default {
       this.opened = opened
     },
     sendSection (jsonResponse) {
-      console.log(jsonResponse)
       let _self = this
       _self.currentIdJournal = undefined
       _self.currentIdJContact = undefined
@@ -68,20 +67,20 @@ export default {
       _self.currentIdJIndexing = []
       _self.currentIdJLanguage = []
       _self.currentIdJCategories = []
-      _self.sendModel(controllerServices.getEnum().revista, {
-        "descripcion": jsonResponse.data.direccion,
-        "doi": jsonResponse.data.doi,
-        "eissn": jsonResponse.data.eissn,
-        "fechaCreacion": jsonResponse.data.fechaCreacion,
-        "fechaIngreso": jsonResponse.data.fechaIngreso,
-        "id": "",
-        "imagen": jsonResponse.data.imagen,
-        "issn": jsonResponse.data.issn,
-        "licenciaId": jsonResponse.data.licenciaId,
-        "subtitulo": jsonResponse.data.subtitulo,
-        "titulo": jsonResponse.data.titulo,
-        "tituloCorto": jsonResponse.data.tituloCorto
-      }).then(response => {
+      _self.sendModel(controllerServices.getEnum().revista, _self.getJsonNotVoid({
+        'descripcion': jsonResponse.data.direccion,
+        'doi': jsonResponse.data.doi,
+        'eissn': jsonResponse.data.eissn,
+        'fechaCreacion': jsonResponse.data.fechaCreacion,
+        'fechaIngreso': jsonResponse.data.fechaIngreso,
+        'id': '',
+        'imagen': jsonResponse.data.imagen,
+        'issn': jsonResponse.data.issn,
+        'licenciaId': jsonResponse.data.licenciaId,
+        'subtitulo': jsonResponse.data.subtitulo,
+        'titulo': jsonResponse.data.titulo,
+        'tituloCorto': jsonResponse.data.tituloCorto
+      })).then(response => {
         if (response['id'] === undefined) {
           console.error('Error:', response.error)
           alert('Error: ' + response.error.message)
@@ -89,14 +88,14 @@ export default {
           return
         }
         _self.currentIdJournal = response['id']
-        _self.sendModel(controllerServices.getEnum().rcontacto, {
-          "editor": jsonResponse.data.editor,
-          "editorGooglescholar": jsonResponse.data.editorGooglescholar,
-          "editorOrcid": jsonResponse.data.editorOrcid,
-          "facultad": jsonResponse.data.institucion.split(",").length == 2 ? jsonResponse.data.institucion.split(",")[0]:'',
-          "id": _self.currentIdJournal,
-          "institucion": jsonResponse.data.institucion.split(",").length == 2 ? jsonResponse.data.institucion.split(",")[1]:jsonResponse.data.institucion
-        }).then(response => {
+        _self.sendModel(controllerServices.getEnum().rcontacto, _self.getJsonNotVoid({
+          'editor': jsonResponse.data.editor,
+          'editorGooglescholar': jsonResponse.data.editorGooglescholar,
+          'editorOrcid': jsonResponse.data.editorOrcid,
+          'facultad': jsonResponse.data.institucion.split(',').length == 2 ? jsonResponse.data.institucion.split(',')[0] : '',
+          'id': _self.currentIdJournal,
+          'institucion': jsonResponse.data.institucion.split(',').length == 2 ? jsonResponse.data.institucion.split(',')[1] : jsonResponse.data.institucion
+        })).then(response => {
           if (response['id'] === undefined) {
             console.error('Error:', response.error)
             alert('Error: ' + response.error.message)
@@ -104,59 +103,31 @@ export default {
             return
           }
           _self.currentIdJContact = response['id']
-
-          console.log({
-            "apc": jsonResponse.data.apc,
-            "codigoEtica": jsonResponse.data.codigoEtica,
-            "correo": jsonResponse.data.correo,
-            "disciplinaId": jsonResponse.data.disciplinaId,
-            "disciplinaId1": jsonResponse.data.disciplinaId1,
-            "disciplinaId2": jsonResponse.data.disciplinaId2,
-            "disciplinaId3": jsonResponse.data.disciplinaId3,
-            "equipoEditorial": jsonResponse.data.equipoEditorial,
-            "estiloCitacionId": jsonResponse.data.estiloCitacionId,
-            "facebook": jsonResponse.data.facebook,
-            "googlescholar": jsonResponse.data.googlescholar,
-            "guiaAutores": jsonResponse.data.guiaAutores,
-            "id": _self.currentIdJournal,
-            "instagram": jsonResponse.data.instagram,
-            "oai": jsonResponse.data.oai,
-            "periodicidadId": jsonResponse.data.periodicidadId,
-            "periodicidadOtro": jsonResponse.data.periodicidadOtro,
-            "politicaAutoarchivoId": jsonResponse.data.politicaAutoarchivoId,
-            "preprint": jsonResponse.data.preprint,
-            "tipoRevisionParesId": jsonResponse.data.tipoRevisionParesId,
-            "twitter": jsonResponse.data.twitter,
-            "url": jsonResponse.data.url,
-            "videopresentacion": jsonResponse.data.videopresentacion
-          })
-
-
-          _self.sendModel(controllerServices.getEnum().radicional, {
-            "apc": jsonResponse.data.apc,
-            "codigoEtica": jsonResponse.data.codigoEtica,
-            "correo": jsonResponse.data.correo,
-            "disciplinaId": jsonResponse.data.disciplinaId,
-            "disciplinaId1": jsonResponse.data.disciplinaId1,//si no hay no sale
-            "disciplinaId2": jsonResponse.data.disciplinaId2,
-            "disciplinaId3": jsonResponse.data.disciplinaId3,
-            "equipoEditorial": jsonResponse.data.equipoEditorial,
-            "estiloCitacionId": jsonResponse.data.estiloCitacionId,
-            "facebook": jsonResponse.data.facebook,
-            "googlescholar": jsonResponse.data.googlescholar,
-            "guiaAutores": jsonResponse.data.guiaAutores,
-            "id": _self.currentIdJournal,
-            "instagram": jsonResponse.data.instagram,
-            "oai": jsonResponse.data.oai,
-            "periodicidadId": jsonResponse.data.periodicidadId,
-            "periodicidadOtro": jsonResponse.data.periodicidadOtro,
-            "politicaAutoarchivoId": jsonResponse.data.politicaAutoarchivoId,
-            "preprint": jsonResponse.data.preprint,
-            "tipoRevisionParesId": jsonResponse.data.tipoRevisionParesId,
-            "twitter": jsonResponse.data.twitter,
-            "url": jsonResponse.data.url,
-            "videopresentacion": jsonResponse.data.videopresentacion
-          }).then(response => {
+          _self.sendModel(controllerServices.getEnum().radicional, _self.getJsonNotVoid({
+            'apc': jsonResponse.data.apc,
+            'codigoEtica': jsonResponse.data.codigoEtica,
+            'correo': jsonResponse.data.correo,
+            'disciplinaId': jsonResponse.data.disciplinaId,
+            'disciplinaId1': jsonResponse.data.disciplinaId1, // si no hay no sale
+            'disciplinaId2': jsonResponse.data.disciplinaId2,
+            'disciplinaId3': jsonResponse.data.disciplinaId3,
+            'equipoEditorial': jsonResponse.data.equipoEditorial,
+            'estiloCitacionId': jsonResponse.data.estiloCitacionId,
+            'facebook': jsonResponse.data.facebook,
+            'googlescholar': jsonResponse.data.googlescholar,
+            'guiaAutores': jsonResponse.data.guiaAutores,
+            'id': _self.currentIdJournal,
+            'instagram': jsonResponse.data.instagram,
+            'oai': jsonResponse.data.oai,
+            'periodicidadId': jsonResponse.data.periodicidadId,
+            'periodicidadOtro': jsonResponse.data.periodicidadOtro,
+            'politicaAutoarchivoId': jsonResponse.data.politicaAutoarchivoId,
+            'preprint': jsonResponse.data.preprint,
+            'tipoRevisionParesId': jsonResponse.data.tipoRevisionParesId,
+            'twitter': jsonResponse.data.twitter,
+            'url': jsonResponse.data.url,
+            'videopresentacion': jsonResponse.data.videopresentacion
+          })).then(response => {
             if (response['id'] === undefined) {
               console.error('Error:', response.error)
               alert('Error: ' + response.error.message)
@@ -164,13 +135,13 @@ export default {
               return
             }
             _self.currentIdJAdd = response['id']
-            _self.sendModel(controllerServices.getEnum().rubicacion, {
-              "ciudadId": jsonResponse.data.ciudadId,
-              "direccion": jsonResponse.data.direccion,
-              "id": _self.currentIdJournal,
-              "telefono": jsonResponse.data.telefono,
-              "zipcode": jsonResponse.data.zipcode
-            }).then(response => {
+            _self.sendModel(controllerServices.getEnum().rubicacion, _self.getJsonNotVoid({
+              'ciudadId': jsonResponse.data.ciudadId,
+              'direccion': jsonResponse.data.direccion,
+              'id': _self.currentIdJournal,
+              'telefono': jsonResponse.data.telefono,
+              'zipcode': jsonResponse.data.zipcode
+            })).then(response => {
               if (response['id'] === undefined) {
                 console.error('Error:', response.error)
                 alert('Error: ' + response.error.message)
@@ -180,42 +151,42 @@ export default {
               _self.currentIdJLocation = response['id']
               let arrAux = []
               for (const key in jsonResponse.data.indexacionesId) {
-                arrAux.push({
-                  "id": "",
-                  "indexacionesId": jsonResponse.data.indexacionesId[key],
-                  "revistaId": _self.currentIdJournal,
-                  "parametro": jsonResponse.data[jsonResponse.auxIndex[jsonResponse.data.indexacionesId[key]]]
-                })
+                arrAux.push(_self.getJsonNotVoid({
+                  'id': '',
+                  'indexacionesId': jsonResponse.data.indexacionesId[key],
+                  'revistaId': _self.currentIdJournal,
+                  'parametro': jsonResponse.data[jsonResponse.auxIndex[jsonResponse.data.indexacionesId[key]]]
+                }))
               }
-              _self.sendModelGroup(controllerServices.getEnum().rindexaciones, 0, arrAux, "currentIdJIndexing", function(err, data){
+              _self.sendModelGroup(controllerServices.getEnum().rindexaciones, 0, arrAux, 'currentIdJIndexing', function (err, data) {
                 if (err) {
                   return
                 }
                 arrAux = []
                 for (const key in jsonResponse.data.idiomaId) {
-                  arrAux.push({
-                    "id": "",
-                    "idiomaId": jsonResponse.data.idiomaId[key],
-                    "revistaId": _self.currentIdJournal
-                  })
+                  arrAux.push(_self.getJsonNotVoid({
+                    'id': '',
+                    'idiomaId': jsonResponse.data.idiomaId[key],
+                    'revistaId': _self.currentIdJournal
+                  }))
                 }
-                _self.sendModelGroup(controllerServices.getEnum().ridiomas, 0, arrAux, "currentIdJLanguage", function(err, data){
+                _self.sendModelGroup(controllerServices.getEnum().ridiomas, 0, arrAux, 'currentIdJLanguage', function (err, data) {
                   if (err) {
                     return
                   }
                   arrAux = []
                   for (const key in jsonResponse.data.categoriaId) {
-                    arrAux.push({
-                      "id": "",
-                      "categoriaId": jsonResponse.data.categoriaId[key],
-                      "revistaId": _self.currentIdJournal
-                    })
+                    arrAux.push(_self.getJsonNotVoid({
+                      'id': '',
+                      'categoriaId': jsonResponse.data.categoriaId[key],
+                      'revistaId': _self.currentIdJournal
+                    }))
                   }
-                  _self.sendModelGroup(controllerServices.getEnum().revistascategorias, 0, arrAux, "currentIdJCategories", function(err, data){
+                  _self.sendModelGroup(controllerServices.getEnum().revistascategorias, 0, arrAux, 'currentIdJCategories', function (err, data) {
                     if (err) {
                       return
                     }
-                    alert("Se inserto Correctamente")
+                    alert('Se inserto Correctamente')
                     _self.currentIdJournal = undefined
                     _self.currentIdJContact = undefined
                     _self.currentIdJAdd = undefined
@@ -232,17 +203,19 @@ export default {
       })
     },
     sendModel (model, data) {
+      let _self = this
       return controllerServices.postModel(model, data)
         .then(response => response.json())
         .catch(error => {
           console.error('Error:', error)
           alert('Error: ' + error)
+          _self.removeInsertion()
         })
     },
     sendModelGroup (model, index, array, idsGropus, callback) {
       let _self = this
-      if(index > array.length){
-        callback(false, "")
+      if (index >= array.length) {
+        callback(false, '')
         return
       }
       controllerServices.postModel(model, array[index])
@@ -251,6 +224,7 @@ export default {
           console.error('Error:', error)
           alert('Error: ' + error)
           callback(true, error)
+          _self.removeInsertion()
           return
         })
         .then(response => {
@@ -259,10 +233,11 @@ export default {
             alert('Error: ' + response.error.message)
             _self.removeInsertion()
             callback(true, error)
+            _self.removeInsertion()
             return
           }
           _self[idsGropus].push(response['id'])
-          sendModelGroup (model, index++, array, idsGropus, callback)
+          _self.sendModelGroup(model, ++index, array, idsGropus, callback)
         })
     },
     removeInsertion () {
@@ -305,51 +280,74 @@ export default {
                   } else {
                     console.log('Se ha eliminado rubicacion')
                   }
-                  alert('NO Se ha eliminado rindexaciones, ridiomas, revista, favor eliminarlas manualmente desde https://jasolutions.com.co:2083/cpsess8986912440/3rdparty/phpMyAdmin/index.php?login=1&post_login=95105964238457')
-                  controllerServices.deleteModel(controllerServices.getEnum().rindexaciones, _self.currentIdJIndexing)
-                    .catch(error => {
-                      alert('NO Se ha eliminado rindexaciones, favor eliminarla manualmente desde https://jasolutions.com.co:2083/cpsess8986912440/3rdparty/phpMyAdmin/index.php?login=1&post_login=95105964238457');
-                      console.error('Error:', error)
-                      alert("Error: "+error)
-                    })
-                    .then(resp => {
-                      if(resp.count === undefined){
-                        alert('NO Se ha eliminado rindexaciones, favor eliminarla manualmente desde https://jasolutions.com.co:2083/cpsess8986912440/3rdparty/phpMyAdmin/index.php?login=1&post_login=95105964238457');
-                      }else{
-                        console.log('Se ha eliminado rindexaciones');
+                  _self.removeModelGroup(controllerServices.getEnum().rindexaciones, 0, _self.currentIdJIndexing, function (err, data) {
+                    if (err) {
+                      alert('NO Se han eliminado correctamente las rindexaciones, favor eliminarla manualmente desde https://jasolutions.com.co:2083/cpsess8986912440/3rdparty/phpMyAdmin/index.php?login=1&post_login=95105964238457')
+                    } else {
+                      console.log('Se ha eliminado rindexaciones')
+                    }
+                    _self.removeModelGroup(controllerServices.getEnum().ridiomas, 0, _self.currentIdJLanguage, function (err, data) {
+                      if (err) {
+                        alert('NO Se han eliminado correctamente los ridiomas, favor eliminarla manualmente desde https://jasolutions.com.co:2083/cpsess8986912440/3rdparty/phpMyAdmin/index.php?login=1&post_login=95105964238457')
+                      } else {
+                        console.log('Se ha eliminado ridiomas')
                       }
-                      controllerServices.deleteModel(controllerServices.getEnum().ridiomas, _self.currentId)
-                        .catch(error => {
-                          alert('NO Se ha eliminado la insercion ridiomas, favor eliminarla manualmente desde https://jasolutions.com.co:2083/cpsess8986912440/3rdparty/phpMyAdmin/index.php?login=1&post_login=95105964238457');
-                          console.error('Error:', error)
-                          alert("Error: "+error)
-                        })
-                        .then(resp => {
-                          if(resp.count === undefined){
-                            alert('NO Se ha eliminado la insercion ridiomas, favor eliminarla manualmente desde https://jasolutions.com.co:2083/cpsess8986912440/3rdparty/phpMyAdmin/index.php?login=1&post_login=95105964238457');
-                          }else{
-                            console.log('Se ha eliminado ridiomas');
-                          }
-                          controllerServices.deleteModel(controllerServices.getEnum().revista, _self.currentId)
+                      _self.removeModelGroup(controllerServices.getEnum().revistascategorias, 0, _self.currentIdJCategories, function (err, data) {
+                        if (err) {
+                          alert('NO Se han eliminado correctamente las revistas categorias, favor eliminarla manualmente desde https://jasolutions.com.co:2083/cpsess8986912440/3rdparty/phpMyAdmin/index.php?login=1&post_login=95105964238457')
+                        } else {
+                          console.log('Se ha eliminado revista categorias')
+                          controllerServices.deleteModel(controllerServices.getEnum().revista, _self.currentIdJournal)
                             .catch(error => {
-                              alet('No se ha eliminado Revista, favor eliminarla manualmente desde http://journals-research.com:3000/explorer/');
+                              alet('No se ha eliminado Revista, favor eliminarla manualmente desde http://journals-research.com:3000/explorer/')
                               console.error('Error:', error)
-                              alert("Error: "+error)
+                              alert('Error: ' + error)
                             })
                             .then(resp => {
-                              if(resp.count === undefined){
-                                alet('No se ha eliminado Revista, favor eliminarla manualmente desde http://journals-research.com:3000/explorer/');
-                              }else{
-                                console.log('Se ha eliminado Revista');
-                                console.log('Se ha eliminado ridiomas');
+                              if (resp.count === undefined) {
+                                alet('No se ha eliminado Revista, favor eliminarla manualmente desde http://journals-research.com:3000/explorer/')
+                              } else {
+                                console.log('Se ha eliminado Revista')
                                 alert('Se removieron las inserciones con exito')
                               }
                             })
-                        })
-                    }) 
+                        }
+                      })
+                    })
+                  })
                 })
             })
         })
+    },
+    removeModelGroup (model, index, array, callback) {
+      let _self = this
+      if (index > array.length) {
+        callback(false, '')
+        return
+      }
+      controllerServices.deleteModel(model, array[index])
+        .then(response => response.json())
+        .catch(error => {
+          console.error('Error:', error)
+          callback(true, error)
+        })
+        .then(response => {
+          if (response['count'] === undefined) {
+            console.error('Error:', response.error)
+            _self.removeInsertion()
+            callback(true, error)
+          }
+          _self.removeModelGroup(model, ++index, array, callback)
+        })
+    },
+    getJsonNotVoid (json) {
+      let res = {}
+      for (const key in json) {
+        if (json[key] != "" || key == "id") {
+          res[key] = json[key]
+        }
+      }
+      return res
     }
   },
   computed: {

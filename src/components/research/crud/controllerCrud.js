@@ -138,7 +138,7 @@ export default {
           options: []
         },
         {
-          label: 'Ingrese la periodicidad de su revista en caso de ser diferente*', // 12
+          label: 'Ingrese la periodicidad de su revista en caso de ser diferente', // 12
           type: 'text',
           required: false,
           active: true,
@@ -259,6 +259,7 @@ export default {
         },
         {
           label: 'Su revista acepta PrePrint?', // 24
+          required: true,
           placeholder: 'Ingrese preprint',
           type: 'select',
           active: true,

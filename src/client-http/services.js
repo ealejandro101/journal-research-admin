@@ -1,4 +1,4 @@
-let url = 'http://localhost:3000/api'
+let url = 'http://journals-research.com:3000/api'
 
 let services = {
   getEnum () {
