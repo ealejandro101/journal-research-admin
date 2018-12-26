@@ -611,6 +611,7 @@ export default {
         {
           label: 'Disciplina',
           type: 'text',
+          required: true,
           active: true,
           id: 'disciplina',
           placeholder: 'Ingrese el nombre de la Disciplina',
