@@ -59,13 +59,13 @@ export default {
     sendSection (jsonResponse) {
       let _self = this
       this.loading = true
-      jsonResponse.data['id'] = ""
+      jsonResponse.data['id'] = ''
       _self.sendModel(controllerServices.getEnum().disciplina, jsonResponse.data).then(response => {
         _self.loading = false
         if (response['id'] !== undefined) {
           alert('Se ha insertado con exito la Disciplina')
           _self.clearForm()
-        }else {
+        } else {
           console.error('Error:', response.error)
           alert('Error: ' + response.error.message)
         }
@@ -83,10 +83,10 @@ export default {
     },
     clearForm () {
       for (const iterator of this.formJournal.inputs) {
-        if(Array.isArray(iterator.res)){
+        if (Array.isArray(iterator.res)) {
           iterator.res = []
-        }else{
-          iterator.res = ""
+        } else {
+          iterator.res = ''
         }
       }
     }
