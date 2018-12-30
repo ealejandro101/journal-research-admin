@@ -497,6 +497,15 @@ export default {
           name: '',
           value: ''
         },
+        {
+          label: 'Ingresa palabras clave de su revista *', // 46
+          required: true,
+          type: 'checkbox',
+          active: true,
+          id: 'palabraClaveId',
+          res: [],
+          options: []
+        },
       ],
       button: {
         textButton: 'Insertar',
@@ -583,7 +592,14 @@ export default {
                                                     if (errCat) {
                                                       return callbacks(true, dataCat)
                                                     }
-                                                    callbacks(false, formFormat)
+                                                    _self.getInputOptions(
+                                                      controllerServices.getEnum().palabraclave,
+                                                      formFormat.inputs[46], 'palabraClave', function (errpalabraClave, datapalabraClave) {
+                                                        if (errpalabraClave) {
+                                                          return callbacks(true, datapalabraClave)
+                                                        }
+                                                        callbacks(false, formFormat)
+                                                      })
                                                   })
                                               })
                                           })

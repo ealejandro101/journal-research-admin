@@ -45,6 +45,7 @@ export default {
       currentIdJIndexing: [],
       currentIdJLanguage: [],
       currentIdJCategories: [],
+      currentIdJWord: [],
       loading: false,
       loadingImage: ''
     }
@@ -73,6 +74,7 @@ export default {
       _self.currentIdJIndexing = []
       _self.currentIdJLanguage = []
       _self.currentIdJCategories = []
+      _self.currentIdJWord = []
       _self.loading = true
       controllerServices.getModelsFilter(controllerServices.getEnum().revista, { 'where': { 'eissn': jsonResponse.data.eissn } })
         .then(response => response.json())
@@ -226,16 +228,74 @@ export default {
                               _self.loading = false
                               return
                             }
-                            _self.loading = false
-                            alert('Se inserto Correctamente')
-                            _self.currentIdJournal = undefined
-                            _self.currentIdJContact = undefined
-                            _self.currentIdJAdd = undefined
-                            _self.currentIdJLocation = undefined
-                            _self.currentIdJIndexing = []
-                            _self.currentIdJLanguage = []
-                            _self.currentIdJCategories = []
-                            _self.clearForm()
+                            arrAux = []
+                            for (const key in jsonResponse.data.palabraClaveId) {
+                              arrAux.push(_self.getJsonNotVoid({
+                                'id': '',
+                                'palabraClaveId': jsonResponse.data.palabraClaveId[key],
+                                'revistaId': _self.currentIdJournal
+                              }))
+                            }
+                            _self.sendModelGroup(controllerServices.getEnum().palabrasclave, 0, arrAux, 'currentIdJWord', function (err, data) {
+                              if (err) {
+                                _self.loading = false
+                                return
+                              }
+                              controllerServices
+                                .getModelsFilter(controllerServices.getEnum().pais, {"where": {"id": jsonResponse.data.pais}})
+                                  .then(response => response.json())
+                                  .catch(error => {
+                                    console.error('Error:', error)
+                                    alert('Error: ' + error)
+                                    _self.removeInsertion()})
+                                  .then(response => {
+                                    if(response.length == 0){
+                                      alert('Error: Error al intentar asociar el pais a la revista')
+                                      _self.removeInsertion()
+                                    }
+                                    if(response[0].hayrevista == 0){
+                                      response[0].hayrevista = 1
+                                      controllerServices.updateModel(controllerServices.getEnum().pais, response[0])
+                                        .then(response => response.json())
+                                        .catch(error => {
+                                          console.error('Error:', error)
+                                          alert('Error: ' + error)
+                                          _self.removeInsertion()})
+                                        .then(response => {
+                                          if (response['id'] === undefined) {
+                                            console.error('Error:', response.error)
+                                            alert('Error: ' + response.error.message)
+                                            _self.removeInsertion()
+                                            _self.loading = false
+                                            return
+                                          }
+                                          _self.loading = false
+                                          alert('Se inserto Correctamente')
+                                          _self.currentIdJournal = undefined
+                                          _self.currentIdJContact = undefined
+                                          _self.currentIdJAdd = undefined
+                                          _self.currentIdJLocation = undefined
+                                          _self.currentIdJIndexing = []
+                                          _self.currentIdJLanguage = []
+                                          _self.currentIdJCategories = []
+                                          _self.currentIdJWord = []
+                                          _self.clearForm()
+                                          return
+                                        })
+                                    }else{
+                                      _self.loading = false
+                                      alert('Se inserto Correctamente')
+                                      _self.currentIdJournal = undefined
+                                      _self.currentIdJContact = undefined
+                                      _self.currentIdJAdd = undefined
+                                      _self.currentIdJLocation = undefined
+                                      _self.currentIdJIndexing = []
+                                      _self.currentIdJLanguage = []
+                                      _self.currentIdJCategories = []
+                                      _self.clearForm()
+                                    }
+                                  })
+                              })
                           })
                         })
                       })
@@ -257,6 +317,7 @@ export default {
         })
     },
     sendModelGroup (model, index, array, idsGropus, callback) {
+      /*idsGropus : El nombre de la variable asociada a data() por si se necesita eliminar */
       let _self = this
       if (index >= array.length) {
         callback(false, '')

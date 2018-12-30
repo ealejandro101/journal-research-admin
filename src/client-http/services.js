@@ -1,5 +1,5 @@
 let url = 'http://journals-research.com:3000/api'
-
+//let url = 'http://localhost:3000/api'
 let services = {
   getEnum () {
     return Object.freeze({
@@ -28,8 +28,7 @@ let services = {
   },
   getModels (model) {
     return fetch(`${url}/${model}`, {
-      method: 'GET', // or 'PUT'
-      // body: JSON.stringify(data), // data can be `string` or {object}!
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json'
       }
@@ -37,8 +36,7 @@ let services = {
   },
   getModelsFilter (model, filter) {
     return fetch(`${url}/${model}?filter=${JSON.stringify(filter)}`, {
-      method: 'GET', // or 'PUT'
-      // body: JSON.stringify(data), // data can be `string` or {object}!
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json'
       }
@@ -46,8 +44,17 @@ let services = {
   },
   postModel (model, data) {
     return fetch(`${url}/${model}`, {
-      method: 'POST', // or 'PUT'
-      body: JSON.stringify(data), // data can be `string` or {object}!
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+  },
+  updateModel (model, data) {
+    return fetch(`${url}/${model}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
       headers: {
         'Content-Type': 'application/json'
       }
@@ -55,7 +62,7 @@ let services = {
   },
   deleteModel (model, data) {
     return fetch(`${url}/${model}/${data}`, {
-      method: 'DELETE', // or 'PUT'
+      method: 'DELETE',
       headers: {
         'Content-Type': 'application/json'
       }
