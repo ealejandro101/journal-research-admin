@@ -123,7 +123,7 @@ export default {
     },
     selectOption (item) {
       if (item.id == 'indexacionesId') {
-        this.form.inputs.splice(47, this.form.inputs.length - 47)//numero : el length inicial del array
+        this.form.inputs.splice(47, this.form.inputs.length - 47)// numero : el length inicial del array
         this.auxIndex = []
         for (const iterator of this.form.inputs[37].res) {
           this.form.inputs.push({

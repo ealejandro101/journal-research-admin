@@ -498,13 +498,13 @@ export default {
           value: ''
         },
         {
-          label: 'Ingresa palabras clave de su revista *', // 46
-          required: true,
-          type: 'checkbox',
+          label: 'Ingresa palabras clave de su revista', // 46
+          required: false,
+          placeholder: 'Ingresa palabras clave de su revista separas por punto y coma (;)',
+          type: 'text',
           active: true,
           id: 'palabraClaveId',
-          res: [],
-          options: []
+          res: ''
         },
       ],
       button: {
@@ -592,14 +592,7 @@ export default {
                                                     if (errCat) {
                                                       return callbacks(true, dataCat)
                                                     }
-                                                    _self.getInputOptions(
-                                                      controllerServices.getEnum().palabraclave,
-                                                      formFormat.inputs[46], 'palabraClave', function (errpalabraClave, datapalabraClave) {
-                                                        if (errpalabraClave) {
-                                                          return callbacks(true, datapalabraClave)
-                                                        }
-                                                        callbacks(false, formFormat)
-                                                      })
+                                                    callbacks(false, formFormat)
                                                   })
                                               })
                                           })
