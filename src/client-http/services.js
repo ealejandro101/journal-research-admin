@@ -77,6 +77,15 @@ let services = {
       }
     })
   },
+  getModelCount (model, filter) {
+    return fetch(`${url}/${model}/count?where=${JSON.stringify(filter)}`, {
+      method: 'GET', // or 'PUT'
+      // body: JSON.stringify(data), // data can be `string` or {object}!
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+  },
 }
 
 export default services

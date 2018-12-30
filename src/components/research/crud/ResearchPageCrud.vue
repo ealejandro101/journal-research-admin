@@ -239,79 +239,100 @@ export default {
                                 }))
                               }
                             }
-                            _self.sendModelGroup(controllerServices.getEnum().palabraclave, 0, arrAux, 'currentIdWord', function (err, data) {
-                              if (err) {
-                                _self.loading = false
-                                return
+                            _self.identifyRepeated(controllerServices.getEnum().palabraclave, 0, arrAux, "palabraClave", [], function(err, data){
+                              //data tiene los index de las palabras que ya estan en la BD
+                              let wordsRepeated = []
+                              for (const iterator of data) {
+                                wordsRepeated.push(arrAux[iterator].palabraClave)
+                                arrAux[iterator] = null
                               }
-                              arrAux = []
-                              for (const iterator of _self.currentIdWord) {
-                                arrAux.push(_self.getJsonNotVoid({
-                                  'id': '',
-                                  'palabraClaveId': iterator,
-                                  'revistaId': _self.currentIdJournal
-                                }))
-                              }
-                              _self.sendModelGroup(controllerServices.getEnum().palabrasclave, 0, arrAux, 'currentIdJWord', function (err, data) {
+                              arrAux = arrAux.filter(function (el) {
+                                return el != null;
+                              });
+                              _self.getIds(controllerServices.getEnum().palabraclave, 0, wordsRepeated, "palabraClave", [], function(err, data){
+                                let idsRepeated = data
+                                _self.sendModelGroup(controllerServices.getEnum().palabraclave, 0, arrAux, 'currentIdWord', function (err, data) {
                                 if (err) {
                                   _self.loading = false
                                   return
                                 }
-                                controllerServices
-                                  .getModelsFilter(controllerServices.getEnum().pais, { 'where': { 'id': jsonResponse.data.pais } })
-                                  .then(response => response.json())
-                                  .catch(error => {
-                                    console.error('Error:', error)
-                                    alert('Error: ' + error)
-                                    _self.removeInsertion()
-                                  })
-                                  .then(response => {
-                                    if (response.length == 0) {
-                                      alert('Error: Error al intentar asociar el pais a la revista')
+                                arrAux = []
+                                for (const iterator of idsRepeated) {
+                                  arrAux.push(_self.getJsonNotVoid({
+                                    'id': '',
+                                    'palabraClaveId': iterator,
+                                    'revistaId': _self.currentIdJournal
+                                  }))
+                                }
+                                for (const iterator of _self.currentIdWord) {
+                                  arrAux.push(_self.getJsonNotVoid({
+                                    'id': '',
+                                    'palabraClaveId': iterator,
+                                    'revistaId': _self.currentIdJournal
+                                  }))
+                                }
+                                _self.sendModelGroup(controllerServices.getEnum().palabrasclave, 0, arrAux, 'currentIdJWord', function (err, data) {
+                                  if (err) {
+                                    _self.loading = false
+                                    return
+                                  }
+                                  controllerServices
+                                    .getModelsFilter(controllerServices.getEnum().pais, { 'where': { 'id': jsonResponse.data.pais } })
+                                    .then(response => response.json())
+                                    .catch(error => {
+                                      console.error('Error:', error)
+                                      alert('Error: ' + error)
                                       _self.removeInsertion()
-                                    }
-                                    if (response[0].hayrevista == 0) {
-                                      response[0].hayrevista = 1
-                                      controllerServices.updateModel(controllerServices.getEnum().pais, response[0])
-                                        .then(response => response.json())
-                                        .catch(error => {
-                                          console.error('Error:', error)
-                                          alert('Error: ' + error)
-                                          _self.removeInsertion()
-                                        })
-                                        .then(response => {
-                                          if (response['id'] === undefined) {
-                                            console.error('Error:', response.error)
-                                            alert('Error: ' + response.error.message)
+                                    })
+                                    .then(response => {
+                                      if (response.length == 0) {
+                                        alert('Error: Error al intentar asociar el pais a la revista')
+                                        _self.removeInsertion()
+                                      }
+                                      if (response[0].hayrevista == 0) {
+                                        response[0].hayrevista = 1
+                                        controllerServices.updateModel(controllerServices.getEnum().pais, response[0])
+                                          .then(response => response.json())
+                                          .catch(error => {
+                                            console.error('Error:', error)
+                                            alert('Error: ' + error)
                                             _self.removeInsertion()
+                                          })
+                                          .then(response => {
+                                            if (response['id'] === undefined) {
+                                              console.error('Error:', response.error)
+                                              alert('Error: ' + response.error.message)
+                                              _self.removeInsertion()
+                                              _self.loading = false
+                                              return
+                                            }
                                             _self.loading = false
-                                            return
-                                          }
-                                          _self.loading = false
-                                          alert('Se inserto Correctamente')
-                                          _self.currentIdJournal = undefined
-                                          _self.currentIdJContact = undefined
-                                          _self.currentIdJAdd = undefined
-                                          _self.currentIdJLocation = undefined
-                                          _self.currentIdJIndexing = []
-                                          _self.currentIdJLanguage = []
-                                          _self.currentIdJCategories = []
-                                          _self.currentIdJWord = []
-                                          _self.clearForm()
-                                        })
-                                    } else {
-                                      _self.loading = false
-                                      alert('Se inserto Correctamente')
-                                      _self.currentIdJournal = undefined
-                                      _self.currentIdJContact = undefined
-                                      _self.currentIdJAdd = undefined
-                                      _self.currentIdJLocation = undefined
-                                      _self.currentIdJIndexing = []
-                                      _self.currentIdJLanguage = []
-                                      _self.currentIdJCategories = []
-                                      _self.clearForm()
-                                    }
-                                  })
+                                            alert('Se inserto Correctamente')
+                                            _self.currentIdJournal = undefined
+                                            _self.currentIdJContact = undefined
+                                            _self.currentIdJAdd = undefined
+                                            _self.currentIdJLocation = undefined
+                                            _self.currentIdJIndexing = []
+                                            _self.currentIdJLanguage = []
+                                            _self.currentIdJCategories = []
+                                            _self.currentIdJWord = []
+                                            _self.clearForm()
+                                          })
+                                      } else {
+                                        _self.loading = false
+                                        alert('Se inserto Correctamente')
+                                        _self.currentIdJournal = undefined
+                                        _self.currentIdJContact = undefined
+                                        _self.currentIdJAdd = undefined
+                                        _self.currentIdJLocation = undefined
+                                        _self.currentIdJIndexing = []
+                                        _self.currentIdJLanguage = []
+                                        _self.currentIdJCategories = []
+                                        _self.clearForm()
+                                      }
+                                    })
+                                })
+                              })
                               })
                             })
                           })
@@ -332,6 +353,58 @@ export default {
           console.error('Error:', error)
           alert('Error: ' + error)
           _self.removeInsertion()
+        })
+    },
+    identifyRepeated(model, index, array, attribute, idsRepeated, callback) {
+      let _self = this
+      if (index >= array.length) {
+        callback(false, idsRepeated)
+        return
+      }
+      let jsonFilter = {}
+      jsonFilter[attribute.toString()] = array[index][attribute]
+      controllerServices.getModelCount(model, jsonFilter)
+        .then(response => response.json())
+        .catch(error => {
+          console.error('Error:', error)
+          alert('Error: ' + error)
+          _self.removeInsertion()
+          callback(true, error)
+        })
+        .then(response => {
+          if (response['count'] === undefined) {
+            console.error('Error:', response.error)
+            alert('Error: ' + response.error.message)
+            _self.removeInsertion()
+            callback(true, error)
+            return
+          }else if(response['count'] != 0){
+            idsRepeated.push(index)
+          }
+          _self.identifyRepeated(model, ++index, array, attribute, idsRepeated, callback)
+        })
+    },
+    getIds(model, index, array, attribute, ids, callback) {
+      let _self = this
+      if (index >= array.length) {
+        callback(false, ids)
+        return
+      }
+      let jsonFilter = {}
+      jsonFilter[attribute] = array[index]
+      controllerServices.getModelsFilter(model, {"where": jsonFilter})
+        .then(response => response.json())
+        .catch(error => {
+          console.error('Error:', error)
+          alert('Error: ' + error)
+          _self.removeInsertion()
+          callback(true, error)
+        })
+        .then(response => {
+          if (response.length != 0) {
+            ids.push(response[0].id)
+          }
+          _self.getIds(model, ++index, array, attribute, ids, callback)
         })
     },
     sendModelGroup (model, index, array, idsGropus, callback) {
@@ -355,7 +428,6 @@ export default {
             alert('Error: ' + response.error.message)
             _self.removeInsertion()
             callback(true, error)
-            _self.removeInsertion()
             return
           }
           _self[idsGropus].push(response['id'])
@@ -389,72 +461,73 @@ export default {
           } else {
             console.log('Se ha eliminado RContacto')
           }
-          controllerServices.deleteModel(controllerServices.getEnum().radicional, _self.currentIdJAdd)
+          controllerServices.deleteModel(controllerServices.getEnum().rubicacion, _self.currentIdJLocation)
             .catch(error => {
-              alert('No se ha eliminado radicional, favor eliminarla manualmente desde https://jasolutions.com.co:2083/cpsess8986912440/3rdparty/phpMyAdmin/index.php?login=1&post_login=95105964238457')
+              alert('NO Se ha eliminado rubicacion, favor eliminarla manualmente desde https://jasolutions.com.co:2083/cpsess8986912440/3rdparty/phpMyAdmin/index.php?login=1&post_login=95105964238457')
               console.error('Error:', error)
               alert('Error: ' + error)
             })
             .then(resp => {
               if (resp.count === undefined) {
-                alert('No se ha eliminado radicional, favor eliminarla manualmente desde https://jasolutions.com.co:2083/cpsess8986912440/3rdparty/phpMyAdmin/index.php?login=1&post_login=95105964238457')
+                alert('NO Se ha eliminado rubicacion, favor eliminarla manualmente desde https://jasolutions.com.co:2083/cpsess8986912440/3rdparty/phpMyAdmin/index.php?login=1&post_login=95105964238457')
               } else {
-                console.log('Se ha eliminado radicional')
+                console.log('Se ha eliminado rubicacion')
               }
-              controllerServices.deleteModel(controllerServices.getEnum().rubicacion, _self.currentIdJLocation)
-                .catch(error => {
-                  alert('NO Se ha eliminado rubicacion, favor eliminarla manualmente desde https://jasolutions.com.co:2083/cpsess8986912440/3rdparty/phpMyAdmin/index.php?login=1&post_login=95105964238457')
-                  console.error('Error:', error)
-                  alert('Error: ' + error)
-                })
-                .then(resp => {
-                  if (resp.count === undefined) {
-                    alert('NO Se ha eliminado rubicacion, favor eliminarla manualmente desde https://jasolutions.com.co:2083/cpsess8986912440/3rdparty/phpMyAdmin/index.php?login=1&post_login=95105964238457')
+              _self.removeModelGroup(controllerServices.getEnum().rindexaciones, 0, _self.currentIdJIndexing, function (err, data) {
+                if (err) {
+                  alert('NO Se han eliminado correctamente las rindexaciones, favor eliminarla manualmente desde https://jasolutions.com.co:2083/cpsess8986912440/3rdparty/phpMyAdmin/index.php?login=1&post_login=95105964238457')
+                } else {
+                  console.log('Se ha eliminado rindexaciones')
+                }
+                _self.removeModelGroup(controllerServices.getEnum().ridiomas, 0, _self.currentIdJLanguage, function (err, data) {
+                  if (err) {
+                    alert('NO Se han eliminado correctamente los ridiomas, favor eliminarla manualmente desde https://jasolutions.com.co:2083/cpsess8986912440/3rdparty/phpMyAdmin/index.php?login=1&post_login=95105964238457')
                   } else {
-                    console.log('Se ha eliminado rubicacion')
+                    console.log('Se ha eliminado ridiomas')
                   }
-                  _self.removeModelGroup(controllerServices.getEnum().rindexaciones, 0, _self.currentIdJIndexing, function (err, data) {
+                  _self.removeModelGroup(controllerServices.getEnum().revistascategorias, 0, _self.currentIdJCategories, function (err, data) {
                     if (err) {
-                      alert('NO Se han eliminado correctamente las rindexaciones, favor eliminarla manualmente desde https://jasolutions.com.co:2083/cpsess8986912440/3rdparty/phpMyAdmin/index.php?login=1&post_login=95105964238457')
+                      alert('NO Se han eliminado correctamente las revistas categorias, favor eliminarla manualmente desde https://jasolutions.com.co:2083/cpsess8986912440/3rdparty/phpMyAdmin/index.php?login=1&post_login=95105964238457')
                     } else {
-                      console.log('Se ha eliminado rindexaciones')
+                      console.log('Se ha eliminado revista categorias')
                     }
-                    _self.removeModelGroup(controllerServices.getEnum().ridiomas, 0, _self.currentIdJLanguage, function (err, data) {
+                    _self.removeModelGroup(controllerServices.getEnum().palabrasclave, 0, _self.currentIdJWord, function (err, data) {
                       if (err) {
-                        alert('NO Se han eliminado correctamente los ridiomas, favor eliminarla manualmente desde https://jasolutions.com.co:2083/cpsess8986912440/3rdparty/phpMyAdmin/index.php?login=1&post_login=95105964238457')
+                        alert('NO Se han eliminado correctamente las palabras asociadas a las revistas, favor eliminarla manualmente desde https://jasolutions.com.co:2083/cpsess8986912440/3rdparty/phpMyAdmin/index.php?login=1&post_login=95105964238457')
                       } else {
-                        console.log('Se ha eliminado ridiomas')
+                        console.log('Se ha eliminado las palabras clave asociadas a la revista')
                       }
-                      _self.removeModelGroup(controllerServices.getEnum().revistascategorias, 0, _self.currentIdJCategories, function (err, data) {
-                        if (err) {
-                          alert('NO Se han eliminado correctamente las revistas categorias, favor eliminarla manualmente desde https://jasolutions.com.co:2083/cpsess8986912440/3rdparty/phpMyAdmin/index.php?login=1&post_login=95105964238457')
-                        } else {
-                          console.log('Se ha eliminado revista categorias')
-                          _self.removeModelGroup(controllerServices.getEnum().palabrasclave, 0, _self.currentIdJWord, function (err, data) {
-                            if (err) {
-                              alert('NO Se han eliminado correctamente las palabras asociadas a las revistas, favor eliminarla manualmente desde https://jasolutions.com.co:2083/cpsess8986912440/3rdparty/phpMyAdmin/index.php?login=1&post_login=95105964238457')
-                            } else {
-                              controllerServices.deleteModel(controllerServices.getEnum().revista, _self.currentIdJournal)
-                                .catch(error => {
-                                  alet('No se ha eliminado Revista, favor eliminarla manualmente desde http://journals-research.com:3000/explorer/')
-                                  console.error('Error:', error)
-                                  alert('Error: ' + error)
-                                })
-                                .then(resp => {
-                                  if (resp.count === undefined) {
-                                    alet('No se ha eliminado Revista, favor eliminarla manualmente desde http://journals-research.com:3000/explorer/')
-                                  } else {
-                                    console.log('Se ha eliminado Revista')
-                                    alert('Se removieron las inserciones con exito')
-                                  }
-                                })
-                            }
+                      controllerServices.deleteModel(controllerServices.getEnum().radicional, _self.currentIdJAdd)
+                        .catch(error => {
+                          alert('No se ha eliminado radicional, favor eliminarla manualmente desde https://jasolutions.com.co:2083/cpsess8986912440/3rdparty/phpMyAdmin/index.php?login=1&post_login=95105964238457')
+                          console.error('Error:', error)
+                          alert('Error: ' + error)
+                        })
+                        .then(resp => {
+                          if (resp.count === undefined) {
+                            alert('No se ha eliminado radicional, favor eliminarla manualmente desde https://jasolutions.com.co:2083/cpsess8986912440/3rdparty/phpMyAdmin/index.php?login=1&post_login=95105964238457')
+                          } else {
+                            console.log('Se ha eliminado radicional')
+                          }
+                          controllerServices.deleteModel(controllerServices.getEnum().revista, _self.currentIdJournal)
+                            .catch(error => {
+                              alet('No se ha eliminado Revista, favor eliminarla manualmente desde http://journals-research.com:3000/explorer/')
+                              console.error('Error:', error)
+                              alert('Error: ' + error)
+                            })
+                            .then(resp => {
+                              if (resp.count === undefined) {
+                                alet('No se ha eliminado Revista, favor eliminarla manualmente desde http://journals-research.com:3000/explorer/')
+                              } else {
+                                console.log('Se ha eliminado Revista')
+                                alert('Se removieron las inserciones con exito')
+                              }
                           })
-                        }
                       })
                     })
                   })
                 })
+              })
             })
         })
     },
