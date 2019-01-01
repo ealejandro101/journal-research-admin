@@ -232,11 +232,12 @@ export default {
                             arrAux = []
                             let words = jsonResponse.data.palabraClaveId.split(";")
                             for (const iterator of words) {
-                              if(iterator.trim() != ''){
-                                arrAux.push(_self.getJsonNotVoid({
+                              let keyWord = iterator.trim()
+                              if(keyWord !== ''){
+                                arrAux.push({
                                   'id': '',
-                                  'palabraClave': iterator.trim()
-                                }))
+                                  'palabraClave': keyWord
+                                })
                               }
                             }
                             _self.identifyRepeated(controllerServices.getEnum().palabraclave, 0, arrAux, "palabraClave", [], function(err, data){
