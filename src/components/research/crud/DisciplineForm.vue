@@ -43,6 +43,7 @@ export default {
   },
   created () {
     let _self = this
+    console.log("Actualizado")
     this.loadingImage = loadingGif
     controllerCrud.crudOfDiscipline(function (errDisc, dataDisc) {
       if (errDisc) {

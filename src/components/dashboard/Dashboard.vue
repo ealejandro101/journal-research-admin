@@ -45,7 +45,6 @@ export default {
     FeaturesTab,
     DashboardBottomWidgets
   },
-
   methods: {
     launchEpicmaxToast () {
       this.showToast(`Let's work together!`, {
