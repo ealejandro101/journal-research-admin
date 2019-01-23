@@ -76,6 +76,7 @@ export default {
       _self.currentIdJLanguage = []
       _self.currentIdJCategories = []
       _self.currentIdJWord = []
+      _self.currentIdWord = []
       _self.loading = true
       controllerServices.getModelsFilter(controllerServices.getEnum().revista, { 'where': { 'eissn': jsonResponse.data.eissn } })
         .then(response => response.json())
@@ -230,110 +231,111 @@ export default {
                               return
                             }
                             arrAux = []
-                            let words = jsonResponse.data.palabraClaveId.split(";")
+                            let words = jsonResponse.data.palabraClaveId.split(';')
                             for (const iterator of words) {
                               let keyWord = iterator.trim()
-                              if(keyWord !== ''){
+                              if (keyWord !== '') {
                                 arrAux.push({
                                   'id': '',
                                   'palabraClave': keyWord
                                 })
                               }
                             }
-                            _self.identifyRepeated(controllerServices.getEnum().palabraclave, 0, arrAux, "palabraClave", [], function(err, data){
-                              //data tiene los index de las palabras que ya estan en la BD
+                            _self.identifyRepeated(controllerServices.getEnum().palabraclave, 0, arrAux, 'palabraClave', [], function (err, data) {
+                              // data tiene los index de las palabras que ya estan en la BD
                               let wordsRepeated = []
                               for (const iterator of data) {
                                 wordsRepeated.push(arrAux[iterator].palabraClave)
                                 arrAux[iterator] = null
                               }
                               arrAux = arrAux.filter(function (el) {
-                                return el != null;
-                              });
-                              _self.getIds(controllerServices.getEnum().palabraclave, 0, wordsRepeated, "palabraClave", [], function(err, data){
+                                return el != null
+                              })
+                              _self.getIds(controllerServices.getEnum().palabraclave, 0, wordsRepeated, 'palabraClave', [], function (err, data) {
                                 let idsRepeated = data
                                 _self.sendModelGroup(controllerServices.getEnum().palabraclave, 0, arrAux, 'currentIdWord', function (err, data) {
-                                if (err) {
-                                  _self.loading = false
-                                  return
-                                }
-                                arrAux = []
-                                for (const iterator of idsRepeated) {
-                                  arrAux.push(_self.getJsonNotVoid({
-                                    'id': '',
-                                    'palabraClaveId': iterator,
-                                    'revistaId': _self.currentIdJournal
-                                  }))
-                                }
-                                for (const iterator of _self.currentIdWord) {
-                                  arrAux.push(_self.getJsonNotVoid({
-                                    'id': '',
-                                    'palabraClaveId': iterator,
-                                    'revistaId': _self.currentIdJournal
-                                  }))
-                                }
-                                _self.sendModelGroup(controllerServices.getEnum().palabrasclave, 0, arrAux, 'currentIdJWord', function (err, data) {
                                   if (err) {
                                     _self.loading = false
                                     return
                                   }
-                                  controllerServices
-                                    .getModelsFilter(controllerServices.getEnum().pais, { 'where': { 'id': jsonResponse.data.pais } })
-                                    .then(response => response.json())
-                                    .catch(error => {
-                                      console.error('Error:', error)
-                                      alert('Error: ' + error)
-                                      _self.removeInsertion()
-                                    })
-                                    .then(response => {
-                                      if (response.length == 0) {
-                                        alert('Error: Error al intentar asociar el pais a la revista')
+                                  arrAux = []
+                                  for (const iterator of idsRepeated) {
+                                    arrAux.push(_self.getJsonNotVoid({
+                                      'id': '',
+                                      'palabraClaveId': iterator,
+                                      'revistaId': _self.currentIdJournal
+                                    }))
+                                  }
+                                  for (const iterator of _self.currentIdWord) {
+                                    arrAux.push(_self.getJsonNotVoid({
+                                      'id': '',
+                                      'palabraClaveId': iterator,
+                                      'revistaId': _self.currentIdJournal
+                                    }))
+                                  }
+                                  _self.sendModelGroup(controllerServices.getEnum().palabrasclave, 0, arrAux, 'currentIdJWord', function (err, data) {
+                                    if (err) {
+                                      _self.loading = false
+                                      return
+                                    }
+                                    controllerServices
+                                      .getModelsFilter(controllerServices.getEnum().pais, { 'where': { 'id': jsonResponse.data.pais } })
+                                      .then(response => response.json())
+                                      .catch(error => {
+                                        console.error('Error:', error)
+                                        alert('Error: ' + error)
                                         _self.removeInsertion()
-                                      }
-                                      if (response[0].hayrevista == 0) {
-                                        response[0].hayrevista = 1
-                                        controllerServices.updateModel(controllerServices.getEnum().pais, response[0])
-                                          .then(response => response.json())
-                                          .catch(error => {
-                                            console.error('Error:', error)
-                                            alert('Error: ' + error)
-                                            _self.removeInsertion()
-                                          })
-                                          .then(response => {
-                                            if (response['id'] === undefined) {
-                                              console.error('Error:', response.error)
-                                              alert('Error: ' + response.error.message)
+                                      })
+                                      .then(response => {
+                                        if (response.length == 0) {
+                                          alert('Error: Error al intentar asociar el pais a la revista')
+                                          _self.removeInsertion()
+                                        }
+                                        if (response[0].hayrevista == 0) {
+                                          response[0].hayrevista = 1
+                                          controllerServices.updateModel(controllerServices.getEnum().pais, response[0])
+                                            .then(response => response.json())
+                                            .catch(error => {
+                                              console.error('Error:', error)
+                                              alert('Error: ' + error)
                                               _self.removeInsertion()
+                                            })
+                                            .then(response => {
+                                              if (response['id'] === undefined) {
+                                                console.error('Error:', response.error)
+                                                alert('Error: ' + response.error.message)
+                                                _self.removeInsertion()
+                                                _self.loading = false
+                                                return
+                                              }
                                               _self.loading = false
-                                              return
-                                            }
-                                            _self.loading = false
-                                            alert('Se inserto Correctamente')
-                                            _self.currentIdJournal = undefined
-                                            _self.currentIdJContact = undefined
-                                            _self.currentIdJAdd = undefined
-                                            _self.currentIdJLocation = undefined
-                                            _self.currentIdJIndexing = []
-                                            _self.currentIdJLanguage = []
-                                            _self.currentIdJCategories = []
-                                            _self.currentIdJWord = []
-                                            _self.clearForm()
-                                          })
-                                      } else {
-                                        _self.loading = false
-                                        alert('Se inserto Correctamente')
-                                        _self.currentIdJournal = undefined
-                                        _self.currentIdJContact = undefined
-                                        _self.currentIdJAdd = undefined
-                                        _self.currentIdJLocation = undefined
-                                        _self.currentIdJIndexing = []
-                                        _self.currentIdJLanguage = []
-                                        _self.currentIdJCategories = []
-                                        _self.clearForm()
-                                      }
-                                    })
+                                              alert('Se inserto Correctamente')
+                                              _self.currentIdJournal = undefined
+                                              _self.currentIdJContact = undefined
+                                              _self.currentIdJAdd = undefined
+                                              _self.currentIdJLocation = undefined
+                                              _self.currentIdJIndexing = []
+                                              _self.currentIdJLanguage = []
+                                              _self.currentIdJCategories = []
+                                              _self.currentIdJWord = []
+                                              _self.currentIdWord = []
+                                              _self.clearForm()
+                                            })
+                                        } else {
+                                          _self.loading = false
+                                          alert('Se inserto Correctamente')
+                                          _self.currentIdJournal = undefined
+                                          _self.currentIdJContact = undefined
+                                          _self.currentIdJAdd = undefined
+                                          _self.currentIdJLocation = undefined
+                                          _self.currentIdJIndexing = []
+                                          _self.currentIdJLanguage = []
+                                          _self.currentIdJCategories = []
+                                          _self.clearForm()
+                                        }
+                                      })
+                                  })
                                 })
-                              })
                               })
                             })
                           })
@@ -356,7 +358,7 @@ export default {
           _self.removeInsertion()
         })
     },
-    identifyRepeated(model, index, array, attribute, idsRepeated, callback) {
+    identifyRepeated (model, index, array, attribute, idsRepeated, callback) {
       let _self = this
       if (index >= array.length) {
         callback(false, idsRepeated)
@@ -379,13 +381,13 @@ export default {
             _self.removeInsertion()
             callback(true, error)
             return
-          }else if(response['count'] != 0){
+          } else if (response['count'] != 0) {
             idsRepeated.push(index)
           }
           _self.identifyRepeated(model, ++index, array, attribute, idsRepeated, callback)
         })
     },
-    getIds(model, index, array, attribute, ids, callback) {
+    getIds (model, index, array, attribute, ids, callback) {
       let _self = this
       if (index >= array.length) {
         callback(false, ids)
@@ -393,7 +395,7 @@ export default {
       }
       let jsonFilter = {}
       jsonFilter[attribute] = array[index]
-      controllerServices.getModelsFilter(model, {"where": jsonFilter})
+      controllerServices.getModelsFilter(model, { 'where': jsonFilter })
         .then(response => response.json())
         .catch(error => {
           console.error('Error:', error)
@@ -523,8 +525,8 @@ export default {
                                 console.log('Se ha eliminado Revista')
                                 alert('Se removieron las inserciones con exito')
                               }
-                          })
-                      })
+                            })
+                        })
                     })
                   })
                 })
