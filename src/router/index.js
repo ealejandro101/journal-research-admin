@@ -4,7 +4,7 @@ import AppLayout from '../components/admin/AppLayout'
 import lazyLoading from './lazyLoading'
 import Crud from '../components/research/crud/ResearchPageCrud.vue'
 import DisciplineForm from '../components/research/crud/DisciplineForm.vue'
-
+import AnnouncementForm from '../components/research/crud/AnnouncementForm.vue'
 Vue.use(Router)
 
 const EmptyParentComponent = {
@@ -12,7 +12,7 @@ const EmptyParentComponent = {
 }
 
 export default new Router({
-  mode: 'history', 
+  mode: 'history',
   routes: [
     {
       path: '/',
@@ -25,6 +25,10 @@ export default new Router({
     {
       path: '/addDiscipline',
       component: DisciplineForm
+    },
+    {
+      path: '/announcement',
+      component: AnnouncementForm
     },
     {
       path: '/404',

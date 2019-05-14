@@ -634,6 +634,123 @@ export default {
     }
     callbacks(false, formFormat)
   },
+
+  /*
+  {
+    "id": 0,
+    "descripcion": "string",
+    "fechaInicio": "2019-05-11T00:29:29.473Z",
+    "fechaFinal": "2019-05-11T00:29:29.473Z",
+    "titulo": "string",
+    "imagen": "string",
+    "video": "string",
+    "documentoPdf": "string",
+    "ojs": "string"
+  }
+  */
+  crudOfAnnouncrement (callbacks) {
+    let formFormat = {
+      title: 'Convocatoria',
+      inputs: [
+        {
+          label: 'Revista',
+          type: 'select',
+          required: true,
+          active: true,
+          id: 'revistaId',
+          placeholder: 'Revista:',
+          res: '',
+          options: []
+        },
+        {
+          label: 'Descripcion',
+          type: 'text',
+          required: true,
+          active: true,
+          id: 'descripcion',
+          placeholder: 'Ingrese el nombre de la descripcion',
+          res: ''
+        },
+        {
+          label: 'Fecha de inicio',
+          type: 'date',
+          required: true,
+          active: true,
+          id: 'fechaInicio',
+          placeholder: 'Ingrese la fecha de inicio',
+          res: ''
+        },
+        {
+          label: 'Fecha de cierre',
+          type: 'date',
+          required: true,
+          active: true,
+          id: 'fechaFinal',
+          placeholder: 'Ingrese la fecha de cierre',
+          res: ''
+        },
+        {
+          label: 'Titulo',
+          type: 'text',
+          required: true,
+          active: true,
+          id: 'titulo',
+          placeholder: 'Ingrese el titulo',
+          res: ''
+        },
+        {
+          label: 'Imagen',
+          type: 'file',
+          required: false,
+          active: true,
+          id: 'imagen',
+          placeholder: 'Ingrese la imagen',
+          res: ''
+        },
+        {
+          label: 'Vídeo',
+          type: 'text',
+          required: false,
+          active: true,
+          id: 'video',
+          placeholder: 'Ingrese el video',
+          res: ''
+        },
+        {
+          label: 'Documento PDF',
+          type: 'file',
+          required: false,
+          active: true,
+          id: 'documentoPdf',
+          placeholder: 'Ingrese el documento PDF',
+          res: ''
+        },
+        {
+          label: 'OJS',
+          type: 'text',
+          required: false,
+          active: true,
+          id: 'ojs',
+          placeholder: 'Ingrese el OJS',
+          res: ''
+        }
+      ],
+      button: {
+        textButton: 'Insertar',
+        active: true
+      },
+    }
+
+    this.getInputOptions(
+      controllerServices.getEnum().revista,
+      formFormat.inputs[0], 'titulo', function (errCat, dataCat) {
+        if (errCat) {
+          return callbacks(true, dataCat)
+        }
+        callbacks(false, formFormat)
+      }
+    )
+  },
   getInputOptions (model, input, text, callbacks) {
     // model de la bd, text de las opciones
     // input = {label, type, active, id, res, options}

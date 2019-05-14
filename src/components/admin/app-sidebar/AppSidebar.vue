@@ -17,6 +17,11 @@
             <span>Insertar Disciplina</span>
           </span>
         </sidebar-link>
+        <sidebar-link :to="{ path: '/announcement' }">
+          <span slot="title">
+            <span>Convocatorias</span>
+          </span>
+        </sidebar-link>
       </sidebar-link-group>
     </template>
   </vuestic-sidebar>
@@ -28,7 +33,6 @@ import VuesticSidebar
   from '../../../vuestic-theme/vuestic-components/vuestic-sidebar/VuesticSidebar'
 import SidebarLink from './components/SidebarLink'
 import SidebarLinkGroup from './components/SidebarLinkGroup'
-import jsonTexts from '../../../i18n/es.json'
 
 export default {
   name: 'app-sidebar',

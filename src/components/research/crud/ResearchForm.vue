@@ -17,7 +17,13 @@
                                 <div v-for="(item, index) in form.inputs" class="form-group d-flow-root" v-if="item.active" :key="index">
                                     <label :for="item.id" v-text="item.label" class="textAlignLeft d-block"></label>
                                     <div v-if="item.required && item.res.length == 0" style="color: red" class="isNecessary">Es necesario llenar este campo</div>
-                                    <input v-if="item.type != 'radio' && item.type != 'checkbox' && item.type != 'select'" :type="item.type" class="form-control"
+                                    <input v-if="item.type == 'file'" :type="item.type" class="form-control"
+                                            :id="item.id" :placeholder="item.placeholder"
+                                            :required="item.required"
+                                            :ref="item.id"
+                                            @change="processFile(item.id, index)"
+                                            >
+                                    <input v-else-if="item.type != 'radio' && item.type != 'checkbox' && item.type != 'select'" :type="item.type" class="form-control"
                                             :id="item.id" :placeholder="item.placeholder"
                                             v-model="item.res" :required="item.required" :value="item.value">
                                     <select v-else-if="item.type == 'select'" @change="selectOption(item)" :id="item.id" v-model="item.res" :required="item.required">
@@ -43,8 +49,8 @@
                         </div>
                     </div>
                     <div class="row" v-if="form.links !== undefined">
-                        <div class="col">
-                            <div v-for="(item, index) in form.links" v-if="item.active" :key="index" class="d-flex">
+                        <div v-for="(item, index) in form.links" :key="index" class="col">
+                            <div  v-if="item.active" class="d-flex">
                                 <p v-text="item.description"></p>
                                 <router-link :to="item.link"><p v-text="item.span"></p></router-link>
                             </div>
@@ -122,7 +128,7 @@ export default {
       this.$emit('listen:event', { id: this.form.title, data: jsonResponse, auxIndex: this.auxIndex })
     },
     selectOption (item) {
-      if (item.id == 'indexacionesId') {
+      if (item.id === 'indexacionesId') {
         this.form.inputs.splice(47, this.form.inputs.length - 47)// numero : el length inicial del array
         this.auxIndex = []
         for (const iterator of this.form.inputs[37].res) {
@@ -140,7 +146,7 @@ export default {
           this.auxIndex[this.form.inputs[37].options[iterator - 1].value] = 'parametro' + this.form.inputs[37].options[iterator - 1].text
         }
       }
-      if (item.id == 'pais') {
+      if (item.id === 'pais') {
         controllerServices.getModelsFilter(controllerServices.getEnum().estado, { 'where': { 'country_id': this.form.inputs[31].res } })
           .then(response => response.json())
           .catch(error => {
@@ -156,7 +162,7 @@ export default {
             }
           })
       }
-      if (item.id == 'estado') {
+      if (item.id === 'estado') {
         controllerServices.getModelsFilter(controllerServices.getEnum().ciudad, { 'where': { 'state_id': this.form.inputs[32].res } })
           .then(response => response.json())
           .catch(error => {
@@ -171,6 +177,30 @@ export default {
               })
             }
           })
+      }
+    },
+    processFile (ref, index) {
+      let _self = this
+      if (this.$refs[ref][0].files.length === 0) {
+        _self.form.inputs[index].res = ''
+        return
+      }
+      this.getBase64(this.$refs[ref][0].files[0], function (err, data) {
+        if (err) {
+          _self.form.inputs[index].res = ''
+        } else {
+          _self.form.inputs[index].res = data
+        }
+      })
+    },
+    getBase64 (file, cbRes) {
+      var reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = function () {
+        cbRes(false, reader.result)
+      }
+      reader.onerror = function (error) {
+        cbRes(true, 'Error: ', error)
       }
     }
   }

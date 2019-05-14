@@ -1,7 +1,10 @@
-let url = 'http://journals-research.com:3000/api'
-// let url = 'http://localhost:3000/api'
+// let url = 'http://journals-research.com:3000/api'
+let url = 'http://localhost:3000/api'
 
 let services = {
+  getURL () {
+    return url
+  },
   getEnum () {
     return Object.freeze({
       'categoria': 'Categoria',
@@ -24,7 +27,8 @@ let services = {
       'ridiomas': 'Ridiomas',
       'rindexaciones': 'Rindexaciones',
       'rubicacion': 'Rubicacions',
-      'tiporevisionpares': 'Tiporevisionpares'
+      'tiporevisionpares': 'Tiporevisionpares',
+      'convocatoria': 'Convocatoria'
     })
   },
   getModels (model) {
