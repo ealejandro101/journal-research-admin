@@ -19,3 +19,5 @@ inspect.js
 *.njsproj
 *.sln
 *.sw*
+
+dist

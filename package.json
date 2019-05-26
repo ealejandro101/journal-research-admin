@@ -22,9 +22,9 @@
     "amcharts3": "^3.21.13",
     "ammap3": "^3.21.13",
     "awesome-bootstrap-checkbox": "1.0.0-alpha.5",
-    "connect-history-api-fallback": "^1.5.0",
-    "bootstrap": "^4.0.0",
+    "bootstrap": "^4.3.1",
     "chart.js": "^2.6.0",
+    "connect-history-api-fallback": "^1.5.0",
     "detect-browser": "^3.0.0",
     "element-resize-detector": "^1.1.12",
     "epic-spinners": "^1.0.1",
@@ -58,9 +58,9 @@
     "vuex-router-sync": "5.0.0"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.0.0",
+    "@vue/cli-plugin-babel": "^3.8.0",
     "@vue/cli-plugin-eslint": "^3.0.0",
-    "@vue/cli-service": "^3.0.0",
+    "@vue/cli-service": "^3.8.0",
     "@vue/eslint-config-standard": "^3.0.0",
     "autoprefixer": "9.1.1",
     "chalk": "2.4.1",
