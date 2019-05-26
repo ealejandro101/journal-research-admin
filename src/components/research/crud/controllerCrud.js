@@ -1,6 +1,8 @@
 import controllerServices from '../../../client-http/services'
 import moment from 'moment'
 
+let nowDate = new Date(Date.now())
+
 export default {
   crudOfJournal (callbacks) {
     let diaActual = moment().format().substring(0, 16)
@@ -634,20 +636,6 @@ export default {
     }
     callbacks(false, formFormat)
   },
-
-  /*
-  {
-    "id": 0,
-    "descripcion": "string",
-    "fechaInicio": "2019-05-11T00:29:29.473Z",
-    "fechaFinal": "2019-05-11T00:29:29.473Z",
-    "titulo": "string",
-    "imagen": "string",
-    "video": "string",
-    "documentoPdf": "string",
-    "ojs": "string"
-  }
-  */
   crudOfAnnouncrement (callbacks) {
     let formFormat = {
       title: 'Convocatoria',
@@ -685,6 +673,7 @@ export default {
           type: 'date',
           required: true,
           active: true,
+          min: `${nowDate.getFullYear()}-${(nowDate.getMonth() + 1) < 10 ? '0' : ''}${nowDate.getMonth() + 1}-${(nowDate.getDate() + 1) < 10 ? '0' : ''}${nowDate.getDate()}`,
           id: 'fechaFinal',
           placeholder: 'Ingrese la fecha de cierre',
           res: ''

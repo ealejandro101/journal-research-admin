@@ -4,7 +4,22 @@
       <app-navbar :isOpen="opened" @toggle-menu="toggleSidebar"/>
       <app-sidebar :isOpen="opened" @toggle-menu="toggleSidebar"/>
       <main slot="content" id="content" class="content" role="main">
-        <research-form :form="formJournal" @listen:event="sendSection"></research-form>
+        <div class="container-fluid">
+          <div class="row mb-3 justify-content-center">
+            <div class="col-8">
+              <p>El link del video debe de ser en este formato</p>
+              <div class="divImg w-100">
+                <img :src="imgYoutube" alt="">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <research-form :form="formJournal" @listen:event="sendSection"></research-form>
+            </div>
+          </div>
+        </div>
+
       </main>
       <span slot="footer">©2018. Made by&nbsp;<a href="https://epicmax.co" target="_blank">Epicmax </a></span>
   </vuestic-layout>
@@ -21,6 +36,7 @@ import ResearchForm from './ResearchForm.vue'
 import controllerCrud from './controllerCrud'
 import controllerServices from '../../../client-http/services'
 import loadingGif from '../../../../static/loading.gif'
+import imgYoutube from '../../../assets/linkYoutube.jpg'
 
 export default {
   components: {
@@ -38,7 +54,8 @@ export default {
       opened: true,
       formJournal: undefined,
       loading: false,
-      loadingImage: ''
+      loadingImage: '',
+      imgYoutube: imgYoutube
     }
   },
   created () {
@@ -57,6 +74,9 @@ export default {
       this.opened = opened
     },
     sendSection (jsonResponse) {
+      if (new Date(jsonResponse.data.fechaFinal) < new Date(jsonResponse.data.fechaInicio)) {
+        return alert('La fecha final debe ser menor a la fecha inicial de la convocatoria')
+      }
       let _self = this
       this.loading = true
       jsonResponse.data['id'] = ''
@@ -115,5 +135,9 @@ export default {
   height: 100vh;
   z-index: 100;
   background-color: rgba(0, 0, 0, 0.582);
+}
+.divImg img{
+  width: 100%;
+  height: auto;
 }
 </style>

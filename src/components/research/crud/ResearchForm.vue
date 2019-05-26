@@ -24,7 +24,7 @@
                                             @change="processFile(item.id, index)"
                                             >
                                     <input v-else-if="item.type != 'radio' && item.type != 'checkbox' && item.type != 'select'" :type="item.type" class="form-control"
-                                            :id="item.id" :placeholder="item.placeholder"
+                                            :id="item.id" :placeholder="item.placeholder" :max="item.max" :min="item.min"
                                             v-model="item.res" :required="item.required" :value="item.value">
                                     <select v-else-if="item.type == 'select'" @change="selectOption(item)" :id="item.id" v-model="item.res" :required="item.required">
                                         <option v-for="(option, oindex) in item.options" :key="oindex"
